@@ -13,5 +13,7 @@ namespace Greenhouse_products
     /// </summary>
     public partial class App : Application
     {
+        public int CurrentUser = 0;
+        public bool IsLoggedIn = false;
     }
 }

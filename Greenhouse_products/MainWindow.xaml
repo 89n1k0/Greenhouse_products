@@ -5,8 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Greenhouse_products"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Icon="./images/icon.png"
+        Title="Главное окно" MinHeight="450" MinWidth="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#008000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Foreground="White" FontSize="20" HorizontalAlignment="Left" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Center">Садовый
+                <LineBreak/> край</TextBlock>
+            <TextBlock Text="Овощи" Foreground="White" Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontSize="16" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
+            <TextBlock Text="Фрукты" Foreground="White" Grid.Column="2" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontSize="16" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
+            <TextBlock Text="О нас" Foreground="White" Grid.Column="3" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontSize="16" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
+            <Image Grid.Row="0" Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" Width="40" Height="40" x:Name="account_image">
+                <Image.Clip>
+                    <EllipseGeometry Center="20,20" RadiusX="50" RadiusY="50"/>
+                </Image.Clip>
+            </Image>
+            <Image Grid.Row="0" Grid.Column="5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Height="30" Source="./images/ellipses.png" MouseDown="Image_MouseDown"/>
+            <Popup x:Name="popup" IsOpen="False" PlacementTarget="{Binding ElementName=image}" Placement="Bottom">
+                <StackPanel>
+                    <Button Content="Личный кабинет" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="out" Click="private_acc_Click"/>
+                    <Button Content="Выйти" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" x:Name="private_acc" Click="out_Click"/>
+                </StackPanel>
+            </Popup>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+                <Label Content="О нас" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" Foreground="#008000" FontWeight="DemiBold"/>
+                <TextBlock TextWrapping="Wrap" Width="300" Height="230" Grid.Row="1" TextAlignment="Justify">Магазин "Садовый край" - ваш уголок зелени и свежих проектов! Мы специализируемся на продаже тепличной продукции для истинных ценителей природы. У нас вы найдете все необходимое для создания зеленого уголка в своем доме или саду. <LineBreak/><LineBreak/> В "Садовом крае" вы найдете все, что нужно для создания удивительного огорода или мини-плантации в теплице. Наш ассортимент включает разнообразные сорта тепличных овощей - помидоры, огурцы, перцы, баклажаны, а также экзотические фрукты, такие как арбузы, дыни, ананасы и многое другое.</TextBlock>
+            </Grid>
+            <Image Grid.Column="1" Source="./images/products.jpg" Width="350" Height="350"/>
+        </Grid>
     </Grid>
 </Window>
