@@ -73,6 +73,9 @@
     <Compile Include="PrivateAccount.xaml.cs">
       <DependentUpon>PrivateAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Registration.xaml.cs">
+      <DependentUpon>Registration.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vegetables.xaml.cs">
       <DependentUpon>Vegetables.xaml</DependentUpon>
     </Compile>
@@ -97,6 +100,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PrivateAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Registration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

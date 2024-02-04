@@ -5,8 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Greenhouse_products"
         mc:Ignorable="d"
-        Title="Vegetables" Height="450" Width="800">
+        Icon="./images/icon.png"
+        Title="Овощи" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="ImageStyle" TargetType="Image">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+        <Style x:Key="EllipsesImageStyle" TargetType="Image">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+        <Style x:Key="PopupButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#008000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" FontWeight="Bold" FontSize="20" VerticalAlignment="Center">
+            Садовый
+            <LineBreak/> 
+            край
+            </TextBlock>
+            <TextBlock Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
+            <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
+            <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
+            <Image Grid.Row="0" Grid.Column="4" Source="./images/user.png" Style="{StaticResource ImageStyle}" x:Name="account_image"/>
+            <Image Grid.Row="0" Grid.Column="5" Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}" MouseDown="Image_MouseDown"/>
+            <Popup x:Name="popup" IsOpen="False" PlacementTarget="{Binding ElementName=account_image}" Placement="Bottom">
+                <StackPanel>
+                    <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" x:Name="out" Click="private_acc_Click"/>
+                    <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>
+                </StackPanel>
+            </Popup>
+        </Grid>
     </Grid>
 </Window>

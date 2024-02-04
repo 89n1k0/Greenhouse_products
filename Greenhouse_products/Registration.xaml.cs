@@ -15,19 +15,19 @@ using System.Windows.Shapes;
 namespace Greenhouse_products
 {
     /// <summary>
-    /// Логика взаимодействия для Authorization.xaml
+    /// Логика взаимодействия для Registration.xaml
     /// </summary>
-    public partial class Authorization : Window
+    public partial class Registration : Window
     {
-        public Authorization()
+        public Registration()
         {
             InitializeComponent();
         }
 
-        private void reg_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void autho_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Registration registration = new Registration();
-            registration.Show();
+            Authorization authorization = new Authorization();
+            authorization.Show();
             this.Hide();
         }
     }
