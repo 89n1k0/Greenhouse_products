@@ -55,7 +55,11 @@
             <TextBlock Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
-            <Image Grid.Row="0" Grid.Column="4" Source="./images/user.png" Style="{StaticResource ImageStyle}" x:Name="account_image"/>
+            <Image Grid.Row="0" Grid.Column="4" Source="./images/user.png" Style="{StaticResource ImageStyle}" x:Name="account_image">
+                <Image.Clip>
+                    <EllipseGeometry Center="20,20" RadiusX="50" RadiusY="50"/>
+                </Image.Clip>
+            </Image>
             <Image Grid.Row="0" Grid.Column="5" Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}" MouseDown="Image_MouseDown"/>
             <Popup x:Name="popup" IsOpen="False" PlacementTarget="{Binding ElementName=account_image}" Placement="Bottom">
                 <StackPanel>

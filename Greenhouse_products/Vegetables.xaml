@@ -55,7 +55,11 @@
             <TextBlock Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
-            <Image Grid.Row="0" Grid.Column="4" Source="./images/user.png" Style="{StaticResource ImageStyle}" x:Name="account_image"/>
+            <Image Grid.Row="0" Grid.Column="4" Source="./images/user.png" Style="{StaticResource ImageStyle}" x:Name="account_image">
+                <Image.Clip>
+                    <EllipseGeometry Center="20,20" RadiusX="50" RadiusY="50"/>
+                </Image.Clip>
+            </Image>
             <Image Grid.Row="0" Grid.Column="5" Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}" MouseDown="Image_MouseDown"/>
             <Popup x:Name="popup" IsOpen="False" PlacementTarget="{Binding ElementName=account_image}" Placement="Bottom">
                 <StackPanel>
@@ -63,6 +67,36 @@
                     <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>
                 </StackPanel>
             </Popup>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="167*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="69*"/>
+                <ColumnDefinition Width="131*"/>
+                <ColumnDefinition Width="101*"/>
+                <ColumnDefinition Width="99*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Каталог" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Поиск" FontSize="15" VerticalAlignment="Center" Width="212"/>
+            <Button Grid.Column="2" Content="Найти" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15" Width="80" Margin="10,0,0,0"/>
+            <ComboBox Grid.Column="3" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Width="178">
+                <ComboBoxItem>А-Я</ComboBoxItem>
+                <ComboBoxItem>Я-А</ComboBoxItem>
+                <ComboBoxItem>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Цена:"/>
+                        <Slider TickFrequency="10" TickPlacement="BottomRight" Grid.Column="1" Width="100" Minimum="0" Maximum="100"/>
+                    </Grid>
+                </ComboBoxItem>
+            </ComboBox>
+
         </Grid>
     </Grid>
 </Window>
