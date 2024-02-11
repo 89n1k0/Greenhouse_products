@@ -13,10 +13,10 @@ namespace Greenhouse_products
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class greenhouse_productEntities : DbContext
+    public partial class greenhouse_productsEntities : DbContext
     {
-        public greenhouse_productEntities()
-            : base("name=greenhouse_productEntities")
+        public greenhouse_productsEntities()
+            : base("name=greenhouse_productsEntities")
         {
         }
     
@@ -29,8 +29,8 @@ namespace Greenhouse_products
         public virtual DbSet<Заказ> Заказ { get; set; }
         public virtual DbSet<Каталог> Каталог { get; set; }
         public virtual DbSet<Пользователь> Пользователь { get; set; }
-        public virtual DbSet<Пользователь_заказ> Пользователь_заказ { get; set; }
         public virtual DbSet<Продукция> Продукция { get; set; }
+        public virtual DbSet<Продуция_заказ> Продуция_заказ { get; set; }
         public virtual DbSet<Роль> Роль { get; set; }
         public virtual DbSet<Статус> Статус { get; set; }
     }

@@ -12,14 +12,14 @@ namespace Greenhouse_products
     using System;
     using System.Collections.Generic;
     
-    public partial class Пользователь_заказ
+    public partial class Продуция_заказ
     {
         public int Номер { get; set; }
-        public Nullable<int> Пользователь { get; set; }
+        public Nullable<int> Продукция { get; set; }
         public Nullable<int> Заказ { get; set; }
         public Nullable<int> Количество { get; set; }
     
         public virtual Заказ Заказ1 { get; set; }
-        public virtual Пользователь Пользователь1 { get; set; }
+        public virtual Продукция Продукция1 { get; set; }
     }
 }

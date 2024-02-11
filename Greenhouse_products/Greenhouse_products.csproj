@@ -106,10 +106,10 @@
     <Compile Include="Пользователь.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Пользователь_заказ.cs">
+    <Compile Include="Продукция.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Продукция.cs">
+    <Compile Include="Продуция_заказ.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Роль.cs">

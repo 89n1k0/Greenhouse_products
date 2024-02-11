@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище greenhouse_productModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище greenhouse_productsModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Виды_продукции">
           <Key>
             <PropertyRef Name="Номер" />
@@ -17,9 +17,9 @@
             <PropertyRef Name="Номер" />
           </Key>
           <Property Name="Номер" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Адрес" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Сумма" Type="money" Nullable="false" />
-          <Property Name="Дата_создания" Type="datetime" Nullable="false" />
+          <Property Name="Адрес" Type="nvarchar(max)" />
+          <Property Name="Сумма" Type="money" />
+          <Property Name="Дата_создания" Type="datetime" />
           <Property Name="Статус" Type="int" />
         </EntityType>
         <EntityType Name="Каталог">
@@ -38,17 +38,8 @@
           <Property Name="Почта" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Пароль" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Адрес" Type="nvarchar(max)" />
-          <Property Name="Изображение" Type="image" />
           <Property Name="Роль" Type="int" />
-        </EntityType>
-        <EntityType Name="Пользователь_заказ">
-          <Key>
-            <PropertyRef Name="Номер" />
-          </Key>
-          <Property Name="Номер" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Пользователь" Type="int" />
           <Property Name="Заказ" Type="int" />
-          <Property Name="Количество" Type="int" />
         </EntityType>
         <EntityType Name="Продукция">
           <Key>
@@ -60,6 +51,15 @@
           <Property Name="Вес" Type="int" Nullable="false" />
           <Property Name="Цена" Type="money" Nullable="false" />
           <Property Name="Каталог" Type="int" />
+        </EntityType>
+        <EntityType Name="Продуция_заказ">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Продукция" Type="int" />
+          <Property Name="Заказ" Type="int" />
+          <Property Name="Количество" Type="int" />
         </EntityType>
         <EntityType Name="Роль">
           <Key>
@@ -101,27 +101,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Пользоват__Заказ__48CFD27E">
-          <End Role="Заказ" Type="Self.Заказ" Multiplicity="0..1" />
-          <End Role="Пользователь_заказ" Type="Self.Пользователь_заказ" Multiplicity="*" />
+        <Association Name="FK__Пользоват__Заказ__47DBAE45">
+          <End Role="Заказ" Type="Self.Заказ" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Пользователь" Type="Self.Пользователь" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Заказ">
               <PropertyRef Name="Номер" />
             </Principal>
-            <Dependent Role="Пользователь_заказ">
+            <Dependent Role="Пользователь">
               <PropertyRef Name="Заказ" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Пользоват__Польз__47DBAE45">
-          <End Role="Пользователь" Type="Self.Пользователь" Multiplicity="0..1" />
-          <End Role="Пользователь_заказ" Type="Self.Пользователь_заказ" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Пользователь">
-              <PropertyRef Name="Номер" />
-            </Principal>
-            <Dependent Role="Пользователь_заказ">
-              <PropertyRef Name="Пользователь" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -139,7 +129,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Продукция__Катал__49C3F6B7">
+        <Association Name="FK__Продукция__Катал__48CFD27E">
           <End Role="Каталог" Type="Self.Каталог" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -153,13 +143,37 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Хранилище greenhouse_productModelContainer">
+        <Association Name="FK__Продуция___Заказ__4AB81AF0">
+          <End Role="Заказ" Type="Self.Заказ" Multiplicity="0..1" />
+          <End Role="Продуция_заказ" Type="Self.Продуция_заказ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Заказ">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Продуция_заказ">
+              <PropertyRef Name="Заказ" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Продуция___Проду__49C3F6B7">
+          <End Role="Продукция" Type="Self.Продукция" Multiplicity="0..1" />
+          <End Role="Продуция_заказ" Type="Self.Продуция_заказ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Продукция">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Продуция_заказ">
+              <PropertyRef Name="Продукция" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище greenhouse_productsModelContainer">
           <EntitySet Name="Виды_продукции" EntityType="Self.Виды_продукции" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Заказ" EntityType="Self.Заказ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Каталог" EntityType="Self.Каталог" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Пользователь" EntityType="Self.Пользователь" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Пользователь_заказ" EntityType="Self.Пользователь_заказ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Продукция" EntityType="Self.Продукция" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Продуция_заказ" EntityType="Self.Продуция_заказ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Роль" EntityType="Self.Роль" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Статус" EntityType="Self.Статус" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Заказ__Статус__44FF419A" Association="Self.FK__Заказ__Статус__44FF419A">
@@ -170,28 +184,32 @@
             <End Role="Виды_продукции" EntitySet="Виды_продукции" />
             <End Role="Каталог" EntitySet="Каталог" />
           </AssociationSet>
-          <AssociationSet Name="FK__Пользоват__Заказ__48CFD27E" Association="Self.FK__Пользоват__Заказ__48CFD27E">
+          <AssociationSet Name="FK__Пользоват__Заказ__47DBAE45" Association="Self.FK__Пользоват__Заказ__47DBAE45">
             <End Role="Заказ" EntitySet="Заказ" />
-            <End Role="Пользователь_заказ" EntitySet="Пользователь_заказ" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Пользоват__Польз__47DBAE45" Association="Self.FK__Пользоват__Польз__47DBAE45">
             <End Role="Пользователь" EntitySet="Пользователь" />
-            <End Role="Пользователь_заказ" EntitySet="Пользователь_заказ" />
           </AssociationSet>
           <AssociationSet Name="FK__Пользовате__Роль__46E78A0C" Association="Self.FK__Пользовате__Роль__46E78A0C">
             <End Role="Роль" EntitySet="Роль" />
             <End Role="Пользователь" EntitySet="Пользователь" />
           </AssociationSet>
-          <AssociationSet Name="FK__Продукция__Катал__49C3F6B7" Association="Self.FK__Продукция__Катал__49C3F6B7">
+          <AssociationSet Name="FK__Продукция__Катал__48CFD27E" Association="Self.FK__Продукция__Катал__48CFD27E">
             <End Role="Каталог" EntitySet="Каталог" />
             <End Role="Продукция" EntitySet="Продукция" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Продуция___Заказ__4AB81AF0" Association="Self.FK__Продуция___Заказ__4AB81AF0">
+            <End Role="Заказ" EntitySet="Заказ" />
+            <End Role="Продуция_заказ" EntitySet="Продуция_заказ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Продуция___Проду__49C3F6B7" Association="Self.FK__Продуция___Проду__49C3F6B7">
+            <End Role="Продукция" EntitySet="Продукция" />
+            <End Role="Продуция_заказ" EntitySet="Продуция_заказ" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="greenhouse_productModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="greenhouse_productsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Виды_продукции">
           <Key>
             <PropertyRef Name="Номер" />
@@ -205,12 +223,13 @@
             <PropertyRef Name="Номер" />
           </Key>
           <Property Name="Номер" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Адрес" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Сумма" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Дата_создания" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Адрес" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Сумма" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Дата_создания" Type="DateTime" Precision="3" />
           <Property Name="Статус" Type="Int32" />
           <NavigationProperty Name="Статус1" Relationship="Self.FK__Заказ__Статус__44FF419A" FromRole="Заказ" ToRole="Статус" />
-          <NavigationProperty Name="Пользователь_заказ" Relationship="Self.FK__Пользоват__Заказ__48CFD27E" FromRole="Заказ" ToRole="Пользователь_заказ" />
+          <NavigationProperty Name="Пользователь" Relationship="Self.FK__Пользоват__Заказ__47DBAE45" FromRole="Заказ" ToRole="Пользователь" />
+          <NavigationProperty Name="Продуция_заказ" Relationship="Self.FK__Продуция___Заказ__4AB81AF0" FromRole="Заказ" ToRole="Продуция_заказ" />
         </EntityType>
         <EntityType Name="Каталог">
           <Key>
@@ -220,7 +239,7 @@
           <Property Name="Наименование" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Номер_продукции" Type="Int32" />
           <NavigationProperty Name="Виды_продукции" Relationship="Self.FK__Каталог__Номер_п__45F365D3" FromRole="Каталог" ToRole="Виды_продукции" />
-          <NavigationProperty Name="Продукция" Relationship="Self.FK__Продукция__Катал__49C3F6B7" FromRole="Каталог" ToRole="Продукция" />
+          <NavigationProperty Name="Продукция" Relationship="Self.FK__Продукция__Катал__48CFD27E" FromRole="Каталог" ToRole="Продукция" />
         </EntityType>
         <EntityType Name="Пользователь">
           <Key>
@@ -230,21 +249,10 @@
           <Property Name="Почта" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Пароль" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Адрес" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Изображение" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="Роль" Type="Int32" />
-          <NavigationProperty Name="Пользователь_заказ" Relationship="Self.FK__Пользоват__Польз__47DBAE45" FromRole="Пользователь" ToRole="Пользователь_заказ" />
-          <NavigationProperty Name="Роль1" Relationship="Self.FK__Пользовате__Роль__46E78A0C" FromRole="Пользователь" ToRole="Роль" />
-        </EntityType>
-        <EntityType Name="Пользователь_заказ">
-          <Key>
-            <PropertyRef Name="Номер" />
-          </Key>
-          <Property Name="Номер" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Пользователь" Type="Int32" />
           <Property Name="Заказ" Type="Int32" />
-          <Property Name="Количество" Type="Int32" />
-          <NavigationProperty Name="Заказ1" Relationship="Self.FK__Пользоват__Заказ__48CFD27E" FromRole="Пользователь_заказ" ToRole="Заказ" />
-          <NavigationProperty Name="Пользователь1" Relationship="Self.FK__Пользоват__Польз__47DBAE45" FromRole="Пользователь_заказ" ToRole="Пользователь" />
+          <NavigationProperty Name="Заказ1" Relationship="Self.FK__Пользоват__Заказ__47DBAE45" FromRole="Пользователь" ToRole="Заказ" />
+          <NavigationProperty Name="Роль1" Relationship="Self.FK__Пользовате__Роль__46E78A0C" FromRole="Пользователь" ToRole="Роль" />
         </EntityType>
         <EntityType Name="Продукция">
           <Key>
@@ -256,7 +264,19 @@
           <Property Name="Вес" Type="Int32" Nullable="false" />
           <Property Name="Цена" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="Каталог" Type="Int32" />
-          <NavigationProperty Name="Каталог1" Relationship="Self.FK__Продукция__Катал__49C3F6B7" FromRole="Продукция" ToRole="Каталог" />
+          <NavigationProperty Name="Каталог1" Relationship="Self.FK__Продукция__Катал__48CFD27E" FromRole="Продукция" ToRole="Каталог" />
+          <NavigationProperty Name="Продуция_заказ" Relationship="Self.FK__Продуция___Проду__49C3F6B7" FromRole="Продукция" ToRole="Продуция_заказ" />
+        </EntityType>
+        <EntityType Name="Продуция_заказ">
+          <Key>
+            <PropertyRef Name="Номер" />
+          </Key>
+          <Property Name="Номер" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Продукция" Type="Int32" />
+          <Property Name="Заказ" Type="Int32" />
+          <Property Name="Количество" Type="Int32" />
+          <NavigationProperty Name="Заказ1" Relationship="Self.FK__Продуция___Заказ__4AB81AF0" FromRole="Продуция_заказ" ToRole="Заказ" />
+          <NavigationProperty Name="Продукция1" Relationship="Self.FK__Продуция___Проду__49C3F6B7" FromRole="Продуция_заказ" ToRole="Продукция" />
         </EntityType>
         <EntityType Name="Роль">
           <Key>
@@ -300,19 +320,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Пользоват__Заказ__48CFD27E">
-          <End Role="Заказ" Type="Self.Заказ" Multiplicity="0..1" />
-          <End Role="Пользователь_заказ" Type="Self.Пользователь_заказ" Multiplicity="*" />
+        <Association Name="FK__Пользоват__Заказ__47DBAE45">
+          <End Role="Заказ" Type="Self.Заказ" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Пользователь" Type="Self.Пользователь" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Заказ">
               <PropertyRef Name="Номер" />
             </Principal>
-            <Dependent Role="Пользователь_заказ">
+            <Dependent Role="Пользователь">
               <PropertyRef Name="Заказ" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Продукция__Катал__49C3F6B7">
+        <Association Name="FK__Продуция___Заказ__4AB81AF0">
+          <End Role="Заказ" Type="Self.Заказ" Multiplicity="0..1" />
+          <End Role="Продуция_заказ" Type="Self.Продуция_заказ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Заказ">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Продуция_заказ">
+              <PropertyRef Name="Заказ" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Продукция__Катал__48CFD27E">
           <End Role="Каталог" Type="Self.Каталог" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
@@ -323,18 +357,6 @@
             </Principal>
             <Dependent Role="Продукция">
               <PropertyRef Name="Каталог" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Пользоват__Польз__47DBAE45">
-          <End Role="Пользователь" Type="Self.Пользователь" Multiplicity="0..1" />
-          <End Role="Пользователь_заказ" Type="Self.Пользователь_заказ" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Пользователь">
-              <PropertyRef Name="Номер" />
-            </Principal>
-            <Dependent Role="Пользователь_заказ">
-              <PropertyRef Name="Пользователь" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -352,13 +374,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="greenhouse_productEntities" annotation:LazyLoadingEnabled="true">
+        <Association Name="FK__Продуция___Проду__49C3F6B7">
+          <End Role="Продукция" Type="Self.Продукция" Multiplicity="0..1" />
+          <End Role="Продуция_заказ" Type="Self.Продуция_заказ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Продукция">
+              <PropertyRef Name="Номер" />
+            </Principal>
+            <Dependent Role="Продуция_заказ">
+              <PropertyRef Name="Продукция" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="greenhouse_productsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Виды_продукции" EntityType="Self.Виды_продукции" />
           <EntitySet Name="Заказ" EntityType="Self.Заказ" />
           <EntitySet Name="Каталог" EntityType="Self.Каталог" />
           <EntitySet Name="Пользователь" EntityType="Self.Пользователь" />
-          <EntitySet Name="Пользователь_заказ" EntityType="Self.Пользователь_заказ" />
           <EntitySet Name="Продукция" EntityType="Self.Продукция" />
+          <EntitySet Name="Продуция_заказ" EntityType="Self.Продуция_заказ" />
           <EntitySet Name="Роль" EntityType="Self.Роль" />
           <EntitySet Name="Статус" EntityType="Self.Статус" />
           <AssociationSet Name="FK__Каталог__Номер_п__45F365D3" Association="Self.FK__Каталог__Номер_п__45F365D3">
@@ -369,21 +403,25 @@
             <End Role="Статус" EntitySet="Статус" />
             <End Role="Заказ" EntitySet="Заказ" />
           </AssociationSet>
-          <AssociationSet Name="FK__Пользоват__Заказ__48CFD27E" Association="Self.FK__Пользоват__Заказ__48CFD27E">
+          <AssociationSet Name="FK__Пользоват__Заказ__47DBAE45" Association="Self.FK__Пользоват__Заказ__47DBAE45">
             <End Role="Заказ" EntitySet="Заказ" />
-            <End Role="Пользователь_заказ" EntitySet="Пользователь_заказ" />
+            <End Role="Пользователь" EntitySet="Пользователь" />
           </AssociationSet>
-          <AssociationSet Name="FK__Продукция__Катал__49C3F6B7" Association="Self.FK__Продукция__Катал__49C3F6B7">
+          <AssociationSet Name="FK__Продуция___Заказ__4AB81AF0" Association="Self.FK__Продуция___Заказ__4AB81AF0">
+            <End Role="Заказ" EntitySet="Заказ" />
+            <End Role="Продуция_заказ" EntitySet="Продуция_заказ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Продукция__Катал__48CFD27E" Association="Self.FK__Продукция__Катал__48CFD27E">
             <End Role="Каталог" EntitySet="Каталог" />
             <End Role="Продукция" EntitySet="Продукция" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Пользоват__Польз__47DBAE45" Association="Self.FK__Пользоват__Польз__47DBAE45">
-            <End Role="Пользователь" EntitySet="Пользователь" />
-            <End Role="Пользователь_заказ" EntitySet="Пользователь_заказ" />
           </AssociationSet>
           <AssociationSet Name="FK__Пользовате__Роль__46E78A0C" Association="Self.FK__Пользовате__Роль__46E78A0C">
             <End Role="Роль" EntitySet="Роль" />
             <End Role="Пользователь" EntitySet="Пользователь" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Продуция___Проду__49C3F6B7" Association="Self.FK__Продуция___Проду__49C3F6B7">
+            <End Role="Продукция" EntitySet="Продукция" />
+            <End Role="Продуция_заказ" EntitySet="Продуция_заказ" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -391,9 +429,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище greenhouse_productModelContainer" CdmEntityContainer="greenhouse_productEntities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище greenhouse_productsModelContainer" CdmEntityContainer="greenhouse_productsEntities">
           <EntitySetMapping Name="Виды_продукции">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Виды_продукции">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Виды_продукции">
               <MappingFragment StoreEntitySet="Виды_продукции">
                 <ScalarProperty Name="Номер" ColumnName="Номер" />
                 <ScalarProperty Name="Наименование" ColumnName="Наименование" />
@@ -401,7 +439,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Заказ">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Заказ">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Заказ">
               <MappingFragment StoreEntitySet="Заказ">
                 <ScalarProperty Name="Номер" ColumnName="Номер" />
                 <ScalarProperty Name="Адрес" ColumnName="Адрес" />
@@ -412,7 +450,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Каталог">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Каталог">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Каталог">
               <MappingFragment StoreEntitySet="Каталог">
                 <ScalarProperty Name="Номер" ColumnName="Номер" />
                 <ScalarProperty Name="Наименование" ColumnName="Наименование" />
@@ -421,29 +459,19 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Пользователь">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Пользователь">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Пользователь">
               <MappingFragment StoreEntitySet="Пользователь">
                 <ScalarProperty Name="Номер" ColumnName="Номер" />
                 <ScalarProperty Name="Почта" ColumnName="Почта" />
                 <ScalarProperty Name="Пароль" ColumnName="Пароль" />
                 <ScalarProperty Name="Адрес" ColumnName="Адрес" />
-                <ScalarProperty Name="Изображение" ColumnName="Изображение" />
                 <ScalarProperty Name="Роль" ColumnName="Роль" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Пользователь_заказ">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Пользователь_заказ">
-              <MappingFragment StoreEntitySet="Пользователь_заказ">
-                <ScalarProperty Name="Номер" ColumnName="Номер" />
-                <ScalarProperty Name="Пользователь" ColumnName="Пользователь" />
                 <ScalarProperty Name="Заказ" ColumnName="Заказ" />
-                <ScalarProperty Name="Количество" ColumnName="Количество" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Продукция">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Продукция">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Продукция">
               <MappingFragment StoreEntitySet="Продукция">
                 <ScalarProperty Name="Номер" ColumnName="Номер" />
                 <ScalarProperty Name="Изображение" ColumnName="Изображение" />
@@ -454,8 +482,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Продуция_заказ">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Продуция_заказ">
+              <MappingFragment StoreEntitySet="Продуция_заказ">
+                <ScalarProperty Name="Номер" ColumnName="Номер" />
+                <ScalarProperty Name="Продукция" ColumnName="Продукция" />
+                <ScalarProperty Name="Заказ" ColumnName="Заказ" />
+                <ScalarProperty Name="Количество" ColumnName="Количество" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Роль">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Роль">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Роль">
               <MappingFragment StoreEntitySet="Роль">
                 <ScalarProperty Name="Номер" ColumnName="Номер" />
                 <ScalarProperty Name="Наименование" ColumnName="Наименование" />
@@ -463,7 +501,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Статус">
-            <EntityTypeMapping TypeName="greenhouse_productModel.Статус">
+            <EntityTypeMapping TypeName="greenhouse_productsModel.Статус">
               <MappingFragment StoreEntitySet="Статус">
                 <ScalarProperty Name="Номер" ColumnName="Номер" />
                 <ScalarProperty Name="Наименование" ColumnName="Наименование" />
