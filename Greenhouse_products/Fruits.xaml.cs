@@ -21,9 +21,24 @@ namespace Greenhouse_products
     {
         public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
         public int CurrentUser = ((App)Application.Current).CurrentUser;
+
+        private greenhouse_productEntities _context = new greenhouse_productEntities();
+        private List<Каталог> _category = new List<Каталог>();
+        private List<Продукция> _products = new List<Продукция>();
+        public ListView ListCateg;
+        public ListView ListProduct;
         public Fruits()
         {
             InitializeComponent();
+            ListProducts.Items.Clear();
+            _products = _context.Продукция.Where(x => x.Каталог > 13).ToList();
+            ListProducts.ItemsSource = _products;
+
+            ListCatalog.Items.Clear();
+            _category = _context.Каталог.Where(x => x.Номер_продукции == 2).ToList();
+            ListCatalog.ItemsSource = _category;
+            ListCateg = ListCatalog;
+
             if (account_image.Source == null)
             {
                 Uri resourceUri = new Uri("./images/user.png", UriKind.Relative);
@@ -31,24 +46,7 @@ namespace Greenhouse_products
                 account_image.Source = imageSource;
             }
         }
-        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                if (popup.IsOpen == false)
-                {
-                    Point position = Mouse.GetPosition(this);
-                    popup.HorizontalOffset = position.X;
-                    popup.VerticalOffset = position.Y;
-                    popup.IsOpen = true;
-                }
-                else
-                {
-                    popup.IsOpen = false;
-                }
-            }
-        }
-
+        
         private void vegetables_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Vegetables vegetables = new Vegetables();
@@ -96,6 +94,44 @@ namespace Greenhouse_products
                     authorization.Show();
                     this.Hide();
                 }
+            }
+        }
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListViewItem item)
+            {
+                var product = item.Content as Каталог;
+                int id = product.Номер;
+                ListProducts.Items.Clear();
+                _products = _context.Продукция.Where(x => x.Каталог == id).ToList();
+                ListProducts.ItemsSource = _products;
+
+            }
+        }
+
+        private void Basket_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is ListViewItem item)
+            {
+                var product = item.Content as Каталог;
+                int id = product.Номер;
+
+            }
+            using (greenhouse_productEntities db = new greenhouse_productEntities())
+            {
+                Заказ заказ = new Заказ();
+            }
+        }
+
+        private void find_Click(object sender, RoutedEventArgs e)
+        {
+            string searchText = find.Text;
+            using (greenhouse_productEntities db = new greenhouse_productEntities())
+            {
+                var query = from data in db.Продукция
+                            where data.Наименование.Contains(searchText)
+                            select data;
+                ListProduct.ItemsSource = query.ToList();
             }
         }
     }

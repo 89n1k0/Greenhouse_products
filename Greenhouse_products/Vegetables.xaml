@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Greenhouse_products"
         mc:Ignorable="d"
         Icon="./images/icon.png"
-        Title="Овощи" Height="450" Width="800">
+        Title="Овощи" Height="450" Width="900">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
@@ -60,8 +60,10 @@
                     <EllipseGeometry Center="20,20" RadiusX="50" RadiusY="50"/>
                 </Image.Clip>
             </Image>
-            <Image Grid.Row="0" Grid.Column="5" Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}" MouseDown="Image_MouseDown"/>
-            <Popup x:Name="popup" IsOpen="False" PlacementTarget="{Binding ElementName=account_image}" Placement="Bottom">
+            <ToggleButton x:Name="toggleButton" HorizontalAlignment="Center" VerticalAlignment="Center" ClickMode="Press" Grid.Row="0" Grid.Column="5" Background="LightGoldenrodYellow">
+                <Image Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}"/>
+            </ToggleButton>
+            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False">
                 <StackPanel>
                     <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" x:Name="out" Click="private_acc_Click"/>
                     <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>
@@ -80,8 +82,30 @@
                 <ColumnDefinition Width="99*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Каталог" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Поиск" FontSize="15" VerticalAlignment="Center" Width="212"/>
-            <Button Grid.Column="2" Content="Найти" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15" Width="80" Margin="10,0,0,0"/>
+            <ListView x:Name="ListCatalog" d:ItemsSource="{d:SampleData ItemCount=5}" Width="130" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Grid.Row="1">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel>
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Gray" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid Width="120" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="Catalog" Margin="2,0">
+                                <TextBlock Grid.Row="1" Text="{Binding Наименование}" HorizontalAlignment="Center" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" x:Name="Name_category"></TextBlock>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+            <TextBox Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Поиск" FontSize="15" VerticalAlignment="Center" Width="212" x:Name="find"/>
+            <Button Grid.Column="2" Content="Найти" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15" Width="80" Margin="10,0,0,0" Click="find_Click"/>
             <ComboBox Grid.Column="3" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Width="178">
                 <ComboBoxItem>А-Я</ComboBoxItem>
                 <ComboBoxItem>Я-А</ComboBoxItem>
@@ -96,7 +120,42 @@
                     </Grid>
                 </ComboBoxItem>
             </ComboBox>
-
+            <ListView x:Name="ListProducts" d:ItemsSource="{d:SampleData ItemCount=5}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel>
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Gray" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid Width="160" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="Catalog" Margin="2,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="Auto" MinHeight="25"></RowDefinition>
+                                    <RowDefinition Height="Auto" MinHeight="25"></RowDefinition>
+                                    <RowDefinition Height="Auto" MinHeight="30"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Row="0" Source="{Binding Изображение}" Grid.ColumnSpan="2"/>
+                                <TextBlock Grid.Row="1" Text="{Binding Наименование}" FontSize="15" TextWrapping="Wrap" TextAlignment="Center" x:Name="Name_product" Height="26" Width="132" Grid.ColumnSpan="2"/>
+                                <TextBlock Grid.Row="2" Text="{Binding Вес}" FontSize="13" TextAlignment="Center" Grid.Column="0"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Цена}" FontSize="15" TextAlignment="Center" FontWeight="Bold"/>
+                                <Button Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="120" Height="25" Content="Добавить в корзину" x:Name="Basket" Click="Basket_Click"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </Grid>
     </Grid>
 </Window>

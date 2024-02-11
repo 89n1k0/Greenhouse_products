@@ -60,8 +60,10 @@
                     <EllipseGeometry Center="20,20" RadiusX="50" RadiusY="50"/>
                 </Image.Clip>
             </Image>
-            <Image Grid.Row="0" Grid.Column="5" Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}" MouseDown="Image_MouseDown"/>
-            <Popup x:Name="popup" IsOpen="False" PlacementTarget="{Binding ElementName=account_image}" Placement="Bottom">
+            <ToggleButton x:Name="toggleButton" HorizontalAlignment="Center" VerticalAlignment="Center" ClickMode="Press" Grid.Row="0" Grid.Column="5" Background="LightGoldenrodYellow">
+                <Image Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}"/>
+            </ToggleButton>
+            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False">
                 <StackPanel>
                     <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" x:Name="out" Click="private_acc_Click"/>
                     <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>

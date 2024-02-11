@@ -35,23 +35,7 @@ namespace Greenhouse_products
             }
         }
 
-        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                if (popup.IsOpen == false)
-                {
-                    Point position = Mouse.GetPosition(this);
-                    popup.HorizontalOffset = position.X;
-                    popup.VerticalOffset = position.Y;
-                    popup.IsOpen = true;
-                }
-                else
-                {
-                    popup.IsOpen = false;
-                }
-            }
-        }
+        
 
         private void vegetables_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
