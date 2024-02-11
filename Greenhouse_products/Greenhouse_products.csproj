@@ -70,6 +70,9 @@
     <Compile Include="Fruits.xaml.cs">
       <DependentUpon>Fruits.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ListProductBasket.xaml.cs">
+      <DependentUpon>ListProductBasket.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -123,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Fruits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListProductBasket.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

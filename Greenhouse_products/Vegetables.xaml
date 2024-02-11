@@ -107,8 +107,8 @@
             <TextBox Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Поиск" FontSize="15" VerticalAlignment="Center" Width="212" x:Name="find"/>
             <Button Grid.Column="2" Content="Найти" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15" Width="80" Margin="10,0,0,0" Click="find_Click"/>
             <ComboBox Grid.Column="3" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Width="178">
-                <ComboBoxItem>А-Я</ComboBoxItem>
-                <ComboBoxItem>Я-А</ComboBoxItem>
+                <ComboBoxItem x:Name="sort" MouseLeftButtonDown="sort_MouseLeftButtonDown">А-Я</ComboBoxItem>
+                <ComboBoxItem x:Name="reverse" MouseLeftButtonDown="reverse_MouseLeftButtonDown">Я-А</ComboBoxItem>
                 <ComboBoxItem>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -116,7 +116,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Цена:"/>
-                        <Slider TickFrequency="10" TickPlacement="BottomRight" Grid.Column="1" Width="100" Minimum="0" Maximum="100"/>
+                        <Slider TickFrequency="10" TickPlacement="BottomRight" x:Name="slider" Grid.Column="1" Width="100" Minimum="0" Maximum="100" ValueChanged="Slider_ValueChanged"/>
                     </Grid>
                 </ComboBoxItem>
             </ComboBox>

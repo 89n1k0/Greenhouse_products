@@ -24,28 +24,18 @@ namespace Greenhouse_products
         public PrivateAccount()
         {
             InitializeComponent();
+            using (greenhouse_productsEntities db = new greenhouse_productsEntities())
+            {
+                Пользователь пользователь = db.Пользователь.Where(x => x.Номер == CurrentUser).FirstOrDefault();
+                email.Text = пользователь.Почта;
+                pass.Text = пользователь.Пароль;
+
+            }
             if (account_image.Source == null)
             {
                 Uri resourceUri = new Uri("./images/user.png", UriKind.Relative);
                 ImageSource imageSource = new BitmapImage(resourceUri);
                 account_image.Source = imageSource;
-            }
-        }
-        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                if (popup.IsOpen == false)
-                {
-                    Point position = Mouse.GetPosition(this);
-                    popup.HorizontalOffset = position.X;
-                    popup.VerticalOffset = position.Y;
-                    popup.IsOpen = true;
-                }
-                else
-                {
-                    popup.IsOpen = false;
-                }
             }
         }
 
@@ -96,6 +86,18 @@ namespace Greenhouse_products
                     authorization.Show();
                     this.Hide();
                 }
+            }
+        }
+
+        private void save_Click(object sender, RoutedEventArgs e)
+        {
+            using (greenhouse_productsEntities db = new greenhouse_productsEntities())
+            {
+                Пользователь пользователь = db.Пользователь.Where(x => x.Номер == CurrentUser).FirstOrDefault();
+                пользователь.Почта = email.Text;
+                пользователь.Пароль = pass.Text;
+                db.SaveChanges();
+
             }
         }
     }
