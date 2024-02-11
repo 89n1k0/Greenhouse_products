@@ -17,17 +17,20 @@ namespace Greenhouse_products
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Заказ()
         {
-            this.Пользователь_заказ = new HashSet<Пользователь_заказ>();
+            this.Пользователь = new HashSet<Пользователь>();
+            this.Продуция_заказ = new HashSet<Продуция_заказ>();
         }
     
         public int Номер { get; set; }
         public string Адрес { get; set; }
-        public decimal Сумма { get; set; }
-        public System.DateTime Дата_создания { get; set; }
+        public Nullable<decimal> Сумма { get; set; }
+        public Nullable<System.DateTime> Дата_создания { get; set; }
         public Nullable<int> Статус { get; set; }
     
         public virtual Статус Статус1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Пользователь_заказ> Пользователь_заказ { get; set; }
+        public virtual ICollection<Пользователь> Пользователь { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Продуция_заказ> Продуция_заказ { get; set; }
     }
 }
