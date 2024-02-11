@@ -19,6 +19,9 @@ namespace Greenhouse_products
     /// </summary>
     public partial class Authorization : Window
     {
+        public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
+        public int CurrentUser = ((App)Application.Current).CurrentUser;
+        public bool isAdmin = ((App)Application.Current).isAdmin;
         public Authorization()
         {
             InitializeComponent();
@@ -29,6 +32,41 @@ namespace Greenhouse_products
             Registration registration = new Registration();
             registration.Show();
             this.Hide();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (email.Text != null && pass.Password != null)
+            {
+                using (greenhouse_productsEntities db = new greenhouse_productsEntities())
+                {
+                    Пользователь пользователь = db.Пользователь.Where(x => x.Почта == email.Text && x.Пароль == pass.Password).First();
+                    if (пользователь != null)
+                    {
+                        CurrentUser = пользователь.Номер;
+                        isLoggedIn = true;
+                        if (пользователь.Роль == 1)
+                        {
+                            isAdmin = true;
+                        }
+                        else
+                        {
+                            isAdmin = false;
+                        }
+                        MainWindow mainWindow = new MainWindow();
+                        mainWindow.Show();
+                        this.Hide();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Данный пользователь отсутствует");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Заполните все поля");
+            }
         }
     }
 }

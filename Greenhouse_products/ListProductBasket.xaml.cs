@@ -19,7 +19,7 @@ namespace Greenhouse_products
     /// </summary>
     public partial class ListProductBasket : Window
     {
-        public ListProductBasket()
+        public ListProductBasket(int idBasket)
         {
             InitializeComponent();
         }

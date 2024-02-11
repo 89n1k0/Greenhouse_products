@@ -55,6 +55,7 @@
             <TextBlock Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
+            <TextBlock Grid.Row="4" Text="Добавить" x:Name="add" MouseLeftButtonDown="add_MouseLeftButtonDown"/>
             <Image Grid.Row="0" Grid.Column="4" Source="./images/user.png" Style="{StaticResource ImageStyle}" x:Name="account_image">
                 <Image.Clip>
                     <EllipseGeometry Center="20,20" RadiusX="50" RadiusY="50"/>

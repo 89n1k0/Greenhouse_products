@@ -23,6 +23,7 @@ namespace Greenhouse_products
     {
         public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
         public int CurrentUser = ((App)Application.Current).CurrentUser;
+        public bool isAdmin = ((App)Application.Current).isAdmin;
 
         private greenhouse_productsEntities _context = new greenhouse_productsEntities();
         private List<Каталог> _category = new List<Каталог>();
@@ -32,6 +33,10 @@ namespace Greenhouse_products
         public Fruits()
         {
             InitializeComponent();
+            if (isAdmin == false)
+            {
+                add.Visibility = Visibility.Collapsed;
+            }
             ListProducts.Items.Clear();
             _products = _context.Продукция.Where(x => x.Каталог > 13).ToList();
             ListProducts.ItemsSource = _products;
@@ -155,6 +160,11 @@ namespace Greenhouse_products
             decimal sliderValue = (decimal)slider.Value;
             _products = _context.Продукция.Where(x => x.Каталог > 13 && x.Цена == sliderValue).ToList();
             ListProducts.ItemsSource = _products;
+        }
+
+        private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

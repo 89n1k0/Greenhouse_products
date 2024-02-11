@@ -15,5 +15,6 @@ namespace Greenhouse_products
     {
         public int CurrentUser = 0;
         public bool IsLoggedIn = false;
+        public bool isAdmin = false;
     }
 }

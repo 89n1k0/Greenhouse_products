@@ -21,9 +21,20 @@ namespace Greenhouse_products
     {
         public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
         public int CurrentUser = ((App)Application.Current).CurrentUser;
+        public bool isAdmin = ((App)Application.Current).isAdmin;
+        private greenhouse_productsEntities _context = new greenhouse_productsEntities();
+        private List<Заказ> _basket = new List<Заказ>();
         public PrivateAccount()
         {
             InitializeComponent();
+            if (isAdmin == false)
+            {
+                add.Visibility = Visibility.Collapsed;
+            }
+            ListBasket.Items.Clear();
+
+            //_basket = _context.Заказ.Where(x => x.Каталог < 13).ToList();
+            //ListProducts.ItemsSource = _basket;
             using (greenhouse_productsEntities db = new greenhouse_productsEntities())
             {
                 Пользователь пользователь = db.Пользователь.Where(x => x.Номер == CurrentUser).FirstOrDefault();
@@ -99,6 +110,23 @@ namespace Greenhouse_products
                 db.SaveChanges();
 
             }
+        }
+
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListViewItem item)
+            {
+                var product = item.Content as Заказ;
+                int id = product.Номер;
+                ListProductBasket listProductBasket = new ListProductBasket(id);
+                listProductBasket.Show();
+
+            }
+        }
+
+        private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

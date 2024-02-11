@@ -21,11 +21,11 @@
         <Label Content="Авторизация" HorizontalAlignment="Center"  VerticalAlignment="Center" Grid.ColumnSpan="2" FontSize="25"/>
         <Label Content="Почта" HorizontalAlignment="Left" Margin="163,10,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="15"/>
         <Label Content="Пароль" HorizontalAlignment="Left" Margin="150,118,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="15"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,14,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Почта" VerticalAlignment="Top" Width="120" FontSize="15"/>
-        <PasswordBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" FontSize="15"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,14,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Почта" VerticalAlignment="Top" Width="120" FontSize="15" x:Name="email"/>
+        <PasswordBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Top" Width="120" FontSize="15" x:Name="pass"/>
         <TextBlock Text="Нет аккаунта?" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" FontSize="15"/>
         <TextBlock Grid.Column="1" Text="Зарегистрируйся" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" TextDecorations="Underline" FontSize="15" x:Name="reg" MouseLeftButtonDown="reg_MouseLeftButtonDown"/>
-        <Button Content="Войти" FontSize="20" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Grid.ColumnSpan="2" Width="150" Height="35">
+        <Button Content="Войти" FontSize="20" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Grid.ColumnSpan="2" Width="150" Height="35" Click="Button_Click">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border Background="White" CornerRadius="15" BorderThickness="2" BorderBrush="Green">

@@ -24,9 +24,14 @@ namespace Greenhouse_products
     {
         public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
         public int CurrentUser = ((App)Application.Current).CurrentUser;
+        public bool isAdmin = ((App)Application.Current).isAdmin;
         public MainWindow()
         {
             InitializeComponent();
+            if (isAdmin == false)
+            {
+                add.Visibility = Visibility.Collapsed;
+            }
             if (account_image.Source == null)
             {
                 Uri resourceUri = new Uri("./images/user.png", UriKind.Relative);
@@ -85,6 +90,11 @@ namespace Greenhouse_products
                     this.Hide();
                 }
             }
+        }
+
+        private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
