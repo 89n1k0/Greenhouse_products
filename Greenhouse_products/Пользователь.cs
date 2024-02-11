@@ -14,14 +14,20 @@ namespace Greenhouse_products
     
     public partial class Пользователь
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Пользователь()
+        {
+            this.Заказ = new HashSet<Заказ>();
+        }
+    
         public int Номер { get; set; }
         public string Почта { get; set; }
         public string Пароль { get; set; }
         public string Адрес { get; set; }
         public Nullable<int> Роль { get; set; }
-        public Nullable<int> Заказ { get; set; }
     
-        public virtual Заказ Заказ1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Заказ> Заказ { get; set; }
         public virtual Роль Роль1 { get; set; }
     }
 }

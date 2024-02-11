@@ -4,21 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="067e5fd99dda4ce9920cab1d283e344c" Name="Diagram1">
-        <EntityTypeShape EntityType="greenhouse_productsModel.Виды_продукции" Width="1.5" PointX="1.5" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="greenhouse_productsModel.Заказ" Width="1.5" PointX="3" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="greenhouse_productsModel.Каталог" Width="1.5" PointX="3.75" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="greenhouse_productsModel.Пользователь" Width="1.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="greenhouse_productsModel.Продукция" Width="1.5" PointX="6" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="greenhouse_productsModel.Продуция_заказ" Width="1.5" PointX="8.25" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="greenhouse_productsModel.Роль" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="greenhouse_productsModel.Статус" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <AssociationConnector Association="greenhouse_productsModel.FK__Каталог__Номер_п__45F365D3" ManuallyRouted="false" />
+      <Diagram DiagramId="9ba6be78fa3f4713b4bd88310f81eae5" Name="Diagram1">
+        <EntityTypeShape EntityType="greenhouse_productsModel.Виды_продукции" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="greenhouse_productsModel.Заказ" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="greenhouse_productsModel.Каталог" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="greenhouse_productsModel.Пользователь" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="greenhouse_productsModel.Продукция" Width="1.5" PointX="5.25" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="greenhouse_productsModel.Продуция_заказ" Width="1.5" PointX="7.5" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="greenhouse_productsModel.Роль" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="greenhouse_productsModel.Статус" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <AssociationConnector Association="greenhouse_productsModel.FK__Каталог__Номер_п__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="greenhouse_productsModel.FK__Заказ__Пользоват__45F365D3" ManuallyRouted="false" />
         <AssociationConnector Association="greenhouse_productsModel.FK__Заказ__Статус__44FF419A" ManuallyRouted="false" />
-        <AssociationConnector Association="greenhouse_productsModel.FK__Пользоват__Заказ__47DBAE45" ManuallyRouted="false" />
         <AssociationConnector Association="greenhouse_productsModel.FK__Продуция___Заказ__4AB81AF0" ManuallyRouted="false" />
         <AssociationConnector Association="greenhouse_productsModel.FK__Продукция__Катал__48CFD27E" ManuallyRouted="false" />
-        <AssociationConnector Association="greenhouse_productsModel.FK__Пользовате__Роль__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="greenhouse_productsModel.FK__Пользовате__Роль__47DBAE45" ManuallyRouted="false" />
         <AssociationConnector Association="greenhouse_productsModel.FK__Продуция___Проду__49C3F6B7" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
