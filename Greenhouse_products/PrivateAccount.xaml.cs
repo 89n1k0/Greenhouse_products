@@ -27,6 +27,25 @@ namespace Greenhouse_products
         public PrivateAccount()
         {
             InitializeComponent();
+            if (CurrentUser != 0)
+            {
+                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                if (заказ.Статус != 1)
+                {
+                    basket.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                    count.Text = продуция_Заказ.ToString();
+                    basket.Visibility = Visibility;
+                }
+            }
+            else
+            {
+                basket.Visibility = Visibility.Collapsed;
+            }
+
             if (isAdmin == false)
             {
                 add.Visibility = Visibility.Collapsed;

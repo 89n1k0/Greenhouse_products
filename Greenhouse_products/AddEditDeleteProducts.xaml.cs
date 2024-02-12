@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
+using Application = System.Windows.Application;
 
 namespace Greenhouse_products
 {
@@ -22,6 +23,9 @@ namespace Greenhouse_products
     /// </summary>
     public partial class AddEditDeleteProducts : Window
     {
+        public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
+        public int CurrentUser = ((App)Application.Current).CurrentUser;
+        public bool isAdmin = ((App)Application.Current).isAdmin;
         public greenhouse_productsEntities db;
         private byte[] _image = null;
         public int id;
@@ -152,6 +156,63 @@ namespace Greenhouse_products
                 }
                 ListViewLoad();
                 save.IsEnabled = false;
+            }
+        }
+
+        private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            AddEditDeleteProducts addEditDeleteProducts = new AddEditDeleteProducts();
+            addEditDeleteProducts.Show();
+            this.Hide();
+        }
+
+        private void about_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Hide();
+        }
+
+        private void fruits_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Fruits fruits = new Fruits();
+            fruits.Show();
+            this.Hide();
+        }
+
+        private void vegetables_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Vegetables vegetables = new Vegetables();
+            vegetables.Show();
+            this.Hide();
+        }
+
+        private void out_Click(object sender, RoutedEventArgs e)
+        {
+            isLoggedIn = false;
+            CurrentUser = 0;
+            Authorization authorization = new Authorization();
+            authorization.Show();
+            this.Hide();
+        }
+
+        private void private_acc_Click(object sender, RoutedEventArgs e)
+        {
+            if (isLoggedIn)
+            {
+                PrivateAccount privateAccount = new PrivateAccount();
+                privateAccount.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Authorization authorization = new Authorization();
+                    authorization.Show();
+                    this.Hide();
+                }
             }
         }
     }

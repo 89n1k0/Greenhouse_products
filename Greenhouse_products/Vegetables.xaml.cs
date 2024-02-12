@@ -38,6 +38,25 @@ namespace Greenhouse_products
             }
 
             InitializeComponent();
+            if (CurrentUser != 0)
+            {
+                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                if (заказ.Статус != 1)
+                {
+                    basket.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                    count.Text = продуция_Заказ.ToString();
+                    basket.Visibility = Visibility;
+                }
+            }
+            else
+            {
+                basket.Visibility = Visibility.Collapsed;
+            }
+
             ListProducts.Items.Clear();
             _products = _context.Продукция.Where(x => x.Каталог < 13).ToList();
             ListProducts.ItemsSource = _products;
@@ -184,7 +203,9 @@ namespace Greenhouse_products
 
         private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            AddEditDeleteProducts addEditDeleteProducts = new AddEditDeleteProducts();
+            addEditDeleteProducts.Show();
+            this.Hide();
         }
     }
 }
