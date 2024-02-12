@@ -33,8 +33,8 @@ namespace Greenhouse_products
             }
             ListBasket.Items.Clear();
 
-            //_basket = _context.Заказ.Where(x => x.Каталог < 13).ToList();
-            //ListProducts.ItemsSource = _basket;
+            _basket = _context.Заказ.Where(x => x.Пользователь == CurrentUser).ToList();
+            ListBasket.ItemsSource = _basket;
             using (greenhouse_productsEntities db = new greenhouse_productsEntities())
             {
                 Пользователь пользователь = db.Пользователь.Where(x => x.Номер == CurrentUser).FirstOrDefault();
@@ -126,7 +126,9 @@ namespace Greenhouse_products
 
         private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            AddEditDeleteProducts addEditDeleteProducts = new AddEditDeleteProducts();
+            addEditDeleteProducts.Show();
+            this.Hide();
         }
     }
 }

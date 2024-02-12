@@ -22,6 +22,8 @@ namespace Greenhouse_products
         public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
         public int CurrentUser = ((App)Application.Current).CurrentUser;
         public bool isAdmin = ((App)Application.Current).isAdmin;
+        public decimal sum = ((App)Application.Current).sum;
+        public int id;
 
         private greenhouse_productsEntities _context = new greenhouse_productsEntities();
         private List<Каталог> _category = new List<Каталог>();
@@ -120,13 +122,32 @@ namespace Greenhouse_products
         {
             if (sender is ListViewItem item)
             {
-                var product = item.Content as Каталог;
-                int id = product.Номер;
+                var product = item.Content as Продукция;
+                id = product.Номер;
+                decimal price = product.Цена;
+                sum += price;
 
             }
             using (greenhouse_productsEntities db = new greenhouse_productsEntities())
             {
-                Заказ заказ = new Заказ();
+
+                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).FirstOrDefault();
+                if (заказ.Статус == 1)
+                {
+                    Продуция_заказ продуция_Заказ = new Продуция_заказ();
+                    продуция_Заказ.Заказ = заказ.Номер;
+                    продуция_Заказ.Продукция = id;
+                    db.Продуция_заказ.Add(продуция_Заказ);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    заказ = new Заказ();
+                    заказ.Пользователь = CurrentUser;
+                    заказ.Статус = 1;
+                    db.Заказ.Add(заказ);
+                    db.SaveChanges();
+                }
             }
         }
 
