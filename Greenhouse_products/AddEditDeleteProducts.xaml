@@ -13,6 +13,8 @@
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
         <Style x:Key="ImageStyle" TargetType="Image">
             <Setter Property="HorizontalAlignment" Value="Right"/>
@@ -30,6 +32,16 @@
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="170"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="25"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -108,21 +120,21 @@
                 <Border HorizontalAlignment="Center" Height="80" VerticalAlignment="Center" Width="80" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="Black">
                     <Image Width="80" Height="80" x:Name="image"/>
                 </Border>
-                <Label Content="Название" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center"/>
-                <Label Content="Вес" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"/>
-                <Label Content="Цена" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"/>
-                <Label Content="Количество" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center"/>
-                <Label Content="Каталог" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="name"/>
-                <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="price"/>
-                <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="weidth"/>
-                <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="count"/>
+                <Label Content="Название" Grid.Row="1"/>
+                <Label Content="Вес" Grid.Row="2"/>
+                <Label Content="Цена" Grid.Row="3" VerticalAlignment="Center"/>
+                <Label Content="Количество" Grid.Row="4"/>
+                <Label Content="Каталог" Grid.Row="5"/>
+                <TextBox Grid.Column="1" Grid.Row="1" x:Name="name"/>
+                <TextBox Grid.Column="1" Grid.Row="2" x:Name="price"/>
+                <TextBox Grid.Column="1" Grid.Row="3" x:Name="weidth"/>
+                <TextBox Grid.Column="1" Grid.Row="4" x:Name="count"/>
                 <ComboBox Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" x:Name="catalog"/>
                 <Button Grid.Column="0" Width="170" Height="30" FontSize="16" Content="Сохранить" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="Center" Grid.ColumnSpan="2" x:Name="save" Click="save_Click"/>
             </Grid>
-            <Button Grid.Column="1" Content="Добавить" HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Grid.Row="1" Width="170" Height="30" FontSize="16"  Click="add_Click"/>
-            <Button Grid.Column="1" Content="получить данные" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" x:Name="edit"  Width="170" Height="30" FontSize="16"  Click="edit_Click"/>
-            <Button Grid.Column="1" Content="Удалить" HorizontalAlignment="Center" Margin="0,0,0,30" Grid.Row="1" VerticalAlignment="Bottom" x:Name="delete"  Width="170" Height="30" FontSize="16"  Click="delete_Click"/>
+            <Button Grid.Column="1" Content="Добавить" Margin="0,30,0,0" VerticalAlignment="Top" Grid.Row="1"  Click="add_Click"/>
+            <Button Grid.Column="1" Content="Получить данные" Grid.Row="1" x:Name="edit"  Click="edit_Click"/>
+            <Button Grid.Column="1" Content="Удалить" Margin="0,0,0,30" Grid.Row="1" VerticalAlignment="Bottom" x:Name="delete"  Click="delete_Click"/>
         </Grid>
     </Grid>
 </Window>

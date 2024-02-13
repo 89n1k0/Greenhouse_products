@@ -32,6 +32,24 @@ namespace Greenhouse_products
         public AddEditDeleteProducts()
         {
             InitializeComponent();
+            if (CurrentUser != 0)
+            {
+                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                if (заказ.Статус != 1)
+                {
+                    basket.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    int продуция_Заказ = db.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                    counts.Text = продуция_Заказ.ToString();
+                    basket.Visibility = Visibility;
+                }
+            }
+            else
+            {
+                basket.Visibility = Visibility.Collapsed;
+            }
             save.IsEnabled = false;
             foreach (var d in db.Каталог)
             {
