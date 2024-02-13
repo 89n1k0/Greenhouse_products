@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Greenhouse_products"
         mc:Ignorable="d"
-        Title="Список продуктов заказа" Height="450" Width="450">
+        Title="Список продуктов заказа" Height="500" Width="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="223*"/>

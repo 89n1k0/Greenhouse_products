@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.ComponentModel;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Windows.Controls.Primitives;
 
 namespace Greenhouse_products
 {
@@ -35,28 +36,16 @@ namespace Greenhouse_products
         public Fruits()
         {
             InitializeComponent();
-            if (CurrentUser != 0)
-            {
-                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
-                if (заказ.Статус != 1)
-                {
-                    basket.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
-                    count.Text = продуция_Заказ.ToString();
-                    basket.Visibility = Visibility;
-                }
-            }
-            else
-            {
-                basket.Visibility = Visibility.Collapsed;
-            }
+            popup.IsOpen = false;
+            basket.Visibility = Visibility.Collapsed;
 
             if (isAdmin == false)
             {
                 add.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                add.Visibility = Visibility.Visible;
             }
             ListProducts.Items.Clear();
             _products = _context.Продукция.Where(x => x.Каталог > 13).ToList();
@@ -67,15 +56,33 @@ namespace Greenhouse_products
             _category = _context.Каталог.Where(x => x.Номер_продукции == 2).ToList();
             ListCatalog.ItemsSource = _category;
             ListCateg = ListCatalog;
+        }
 
-            if (account_image.Source == null)
+        public void EllipseBasketCount()
+        {
+            basket.Visibility = Visibility.Collapsed;
+            if (CurrentUser != 0)
             {
-                Uri resourceUri = new Uri("./images/user.png", UriKind.Relative);
-                ImageSource imageSource = new BitmapImage(resourceUri);
-                account_image.Source = imageSource;
+                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                if (заказ != null)
+                {
+                    if (заказ.Статус != 1)
+                    {
+                        basket.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                        count.Text = продуция_Заказ.ToString();
+                        basket.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    basket.Visibility = Visibility.Collapsed;
+                }
             }
         }
-        
         private void vegetables_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Vegetables vegetables = new Vegetables();
@@ -110,6 +117,7 @@ namespace Greenhouse_products
         {
             if (isLoggedIn)
             {
+                popup.IsOpen = false;
                 PrivateAccount privateAccount = new PrivateAccount();
                 privateAccount.Show();
                 this.Hide();
@@ -131,7 +139,6 @@ namespace Greenhouse_products
             {
                 var product = item.Content as Каталог;
                 int id = product.Номер;
-                ListProducts.Items.Clear();
                 _products = _context.Продукция.Where(x => x.Каталог == id).ToList();
                 ListProducts.ItemsSource = _products;
 
@@ -140,33 +147,77 @@ namespace Greenhouse_products
 
         private void Basket_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is ListViewItem item)
+            if (isLoggedIn)
             {
-                var product = item.Content as Продукция;
-                id = product.Номер;
-                decimal price = product.Цена;
-                sum += price;
+                var button = sender as Button;
+                if (button != null)
+                {
+                    var product = button.DataContext as Продукция;
+                    if (product != null)
+                    {
+                        id = product.Номер;
 
-            }
-            using (greenhouse_productsEntities db = new greenhouse_productsEntities())
-            {
-                
-                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).FirstOrDefault();
-                if (заказ.Статус == 1)
-                {
-                    Продуция_заказ продуция_Заказ = new Продуция_заказ();
-                    продуция_Заказ.Заказ = заказ.Номер;
-                    продуция_Заказ.Продукция = id;
-                    db.Продуция_заказ.Add(продуция_Заказ);
-                    db.SaveChanges();
+
+                        using (greenhouse_productsEntities db = new greenhouse_productsEntities())
+                        {
+
+                            Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).FirstOrDefault();
+                            if (заказ != null)
+                            {
+                                if (заказ.Статус == 1)
+                                {
+                                    Продуция_заказ продуция_Заказ = new Продуция_заказ();
+                                    продуция_Заказ.Заказ = заказ.Номер;
+                                    продуция_Заказ.Продукция = id;
+                                    продуция_Заказ.Количество = 1;
+                                    продуция_Заказ.Сумма = db.Продукция.Where(x => x.Номер == id).FirstOrDefault().Цена;
+                                    db.Продуция_заказ.Add(продуция_Заказ);
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    заказ = new Заказ();
+                                    заказ.Пользователь = CurrentUser;
+                                    заказ.Статус = 1;
+                                    db.Заказ.Add(заказ);
+                                    db.SaveChanges();
+
+                                    Продуция_заказ продуция_Заказ = new Продуция_заказ();
+                                    продуция_Заказ.Заказ = заказ.Номер;
+                                    продуция_Заказ.Продукция = id;
+                                    продуция_Заказ.Количество = 1;
+                                    продуция_Заказ.Сумма = db.Продукция.Where(x => x.Номер == id).FirstOrDefault().Цена;
+                                    db.Продуция_заказ.Add(продуция_Заказ);
+                                    db.SaveChanges();
+                                }
+                            }
+                            else
+                            {
+                                заказ = new Заказ();
+                                заказ.Пользователь = CurrentUser;
+                                заказ.Статус = 1;
+                                db.Заказ.Add(заказ);
+                                db.SaveChanges();
+
+                                Продуция_заказ продуция_Заказ = new Продуция_заказ();
+                                продуция_Заказ.Заказ = заказ.Номер;
+                                продуция_Заказ.Продукция = id;
+                                db.Продуция_заказ.Add(продуция_Заказ);
+                                db.SaveChanges();
+                            }
+                            EllipseBasketCount();
+                        }
+                    }
                 }
-                else
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
                 {
-                    заказ = new Заказ();
-                    заказ.Пользователь = CurrentUser;
-                    заказ.Статус = 1;
-                    db.Заказ.Add(заказ);
-                    db.SaveChanges();
+                    Authorization authorization = new Authorization();
+                    authorization.Show();
+                    this.Hide();
                 }
             }
         }
@@ -174,37 +225,70 @@ namespace Greenhouse_products
         private void find_Click(object sender, RoutedEventArgs e)
         {
             string searchText = find.Text;
-            using (greenhouse_productsEntities db = new greenhouse_productsEntities())
+            if (searchText != "")
             {
-                var query = from data in db.Продукция
-                            where data.Наименование.Contains(searchText)
-                            select data;
-                ListProduct.ItemsSource = query.ToList();
+                using (greenhouse_productsEntities db = new greenhouse_productsEntities())
+                {
+                    var query = from data in db.Продукция
+                                where data.Наименование.Contains(searchText) && data.Каталог > 13
+                                select data;
+                    ListProduct.ItemsSource = query.ToList();
+                }
             }
-        }
-
-        private void reverse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _products = _context.Продукция.Where(x => x.Каталог > 13).OrderBy(item => item.Наименование).ToList();
-            ListProducts.ItemsSource = _products;
-        }
-
-        private void sort_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _products = _context.Продукция.Where(x => x.Каталог > 13).OrderByDescending(item => item.Наименование).ToList();
-            ListProducts.ItemsSource = _products;
-        }
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            decimal sliderValue = (decimal)slider.Value;
-            _products = _context.Продукция.Where(x => x.Каталог > 13 && x.Цена == sliderValue).ToList();
-            ListProducts.ItemsSource = _products;
+            else
+            {
+                using (greenhouse_productsEntities db = new greenhouse_productsEntities())
+                {
+                    var query = from data in db.Продукция
+                                where data.Каталог > 13
+                                select data;
+                    ListProduct.ItemsSource = query.ToList();
+                }
+            }
         }
 
         private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            AddEditDeleteProducts addEditDeleteProducts = new AddEditDeleteProducts();
+            addEditDeleteProducts.Show();
+            this.Hide();
+        }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedValue;
+            if (selectedItem == reverse)
+            {
+                _products = _context.Продукция.Where(x => x.Каталог > 13).OrderByDescending(item => item.Наименование).ToList();
+                ListProducts.ItemsSource = _products;
+            }
+            else if (selectedItem == sort)
+            {
+                _products = _context.Продукция.Where(x => x.Каталог > 13).OrderBy(item => item.Наименование).ToList();
+                ListProducts.ItemsSource = _products;
+            }
+        }
+        private void basket_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isLoggedIn)
+            {
+                if (basket.IsVisible)
+                {
+                    Basket basket = new Basket();
+                    basket.Show();
+                    this.Hide();
+                }
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Authorization authorization = new Authorization();
+                    authorization.Show();
+                    this.Hide();
+                }
+            }
         }
     }
 }

@@ -19,9 +19,6 @@ namespace Greenhouse_products
     /// </summary>
     public partial class Authorization : Window
     {
-        public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
-        public int CurrentUser = ((App)Application.Current).CurrentUser;
-        public bool isAdmin = ((App)Application.Current).isAdmin;
         public Authorization()
         {
             InitializeComponent();
@@ -36,22 +33,22 @@ namespace Greenhouse_products
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (email.Text != null && pass.Password != null)
+            if (email.Text != "" && pass.Password != "")
             {
                 using (greenhouse_productsEntities db = new greenhouse_productsEntities())
                 {
                     Пользователь пользователь = db.Пользователь.Where(x => x.Почта == email.Text && x.Пароль == pass.Password).First();
                     if (пользователь != null)
                     {
-                        CurrentUser = пользователь.Номер;
-                        isLoggedIn = true;
-                        if (пользователь.Роль == 1)
+                        ((App)Application.Current).CurrentUser = пользователь.Номер;
+                        ((App)Application.Current).IsLoggedIn = true;
+                        if (пользователь.Роль == 2)
                         {
-                            isAdmin = true;
+                            ((App)Application.Current).isAdmin = true;
                         }
                         else
                         {
-                            isAdmin = false;
+                            ((App)Application.Current).isAdmin = false;
                         }
                         MainWindow mainWindow = new MainWindow();
                         mainWindow.Show();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,35 +27,49 @@ namespace Greenhouse_products
         public bool isLoggedIn = ((App)Application.Current).IsLoggedIn;
         public int CurrentUser = ((App)Application.Current).CurrentUser;
         public bool isAdmin = ((App)Application.Current).isAdmin;
-        public greenhouse_productsEntities db;
-        private byte[] _image = null;
+        public greenhouse_productsEntities db = new greenhouse_productsEntities();
+        public byte[] _image = null;
         public int id;
         public AddEditDeleteProducts()
         {
             InitializeComponent();
-            if (CurrentUser != 0)
+            popup.IsOpen = false;
+            if (isAdmin == false)
             {
-                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
-                if (заказ.Статус != 1)
-                {
-                    basket.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    int продуция_Заказ = db.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
-                    counts.Text = продуция_Заказ.ToString();
-                    basket.Visibility = Visibility;
-                }
+                add.Visibility = Visibility.Collapsed;
             }
             else
             {
-                basket.Visibility = Visibility.Collapsed;
+                add.Visibility = Visibility.Visible;
+            }
+            basket.Visibility = Visibility.Collapsed;
+            if (CurrentUser != 0)
+            {
+                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                if (заказ != null)
+                {
+                    if (заказ.Статус != 1)
+                    {
+                        basket.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        int продуция_Заказ = db.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                        count.Text = продуция_Заказ.ToString();
+                        basket.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    basket.Visibility = Visibility.Collapsed;
+                }
             }
             save.IsEnabled = false;
             foreach (var d in db.Каталог)
             {
-                Categ.Items.Add(d.Наименование);
+                catalog.Items.Add(d.Наименование);
             }
+            ListViewLoad();
         }
         public void ListViewLoad()
         {
@@ -69,13 +84,21 @@ namespace Greenhouse_products
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             string path;
-            if ((bool)openFileDialog.ShowDialog())
+            if (openFileDialog.ShowDialog() == true)
             {
                 path = openFileDialog.FileName;
-                _image = System.IO.File.ReadAllBytes(path);
+                string extension = System.IO.Path.GetExtension(path).ToLower();
+                if (extension == ".jpg" || extension == ".png" || extension == ".jpeg")
+                {
+                    _image = File.ReadAllBytes(path);
+                    MemoryStream ms = new MemoryStream(_image);
+                    image.Source = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                }
+                else
+                {
+                    MessageBox.Show("Выберите файл с расширением .jpg, .png или .jpeg");
+                }
             }
-            MemoryStream ms = new MemoryStream(_image);
-            image.Source = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
         }
         private void add_Click(object sender, RoutedEventArgs e)
         {
@@ -90,9 +113,10 @@ namespace Greenhouse_products
                     Продукция продукция = new Продукция();
                     продукция.Изображение = _image;
                     продукция.Наименование = name.Text;
-                    продукция.Цена = Convert.ToDecimal(price.Text);
-                    продукция.Вес = Convert.ToInt32(weidth.Text);
-                    продукция.Каталог = catalog.SelectedIndex;
+                    продукция.Цена = Decimal.Parse(price.Text);
+                    продукция.Вес = Int32.Parse(weidth.Text);
+                    продукция.Общее_количество_склад = Int32.Parse(count.Text);
+                    продукция.Каталог = catalog.SelectedIndex + 1;
                     db.Продукция.Add(продукция);
                     db.SaveChanges();
                 }
@@ -110,12 +134,14 @@ namespace Greenhouse_products
                     var item = Categ.SelectedItem as Продукция;
                     id = item.Номер;
                     Продукция продукция = db.Продукция.Where(x => x.Номер == id).FirstOrDefault();
+                    _image = продукция.Изображение;
                     MemoryStream ms = new MemoryStream(продукция.Изображение);
                     image.Source = BitmapFrame.Create(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
                     name.Text = продукция.Наименование;
                     price.Text = продукция.Цена.ToString();
                     weidth.Text = продукция.Вес.ToString();
-                    catalog.SelectedIndex = (int)продукция.Каталог;
+                    count.Text = продукция.Общее_количество_склад.ToString();
+                    catalog.SelectedIndex = (int)продукция.Каталог - 1;
                     db.SaveChanges();
                 }
             }
@@ -123,7 +149,6 @@ namespace Greenhouse_products
             {
                 MessageBox.Show("Вы не выбрали ни один элемент");
             }
-            ListViewLoad();
         }
         public static void RemoveProduct(int id)
         {
@@ -164,13 +189,27 @@ namespace Greenhouse_products
                 }
                 else
                 {
-                    Продукция продукция = db.Продукция.Where(x => x.Номер == id).FirstOrDefault();
+                    Продукция продукция = db.Продукция.FirstOrDefault(x => x.Номер == id);
                     продукция.Изображение = _image;
                     продукция.Наименование = name.Text;
-                    продукция.Цена = Convert.ToDecimal(price.Text);
-                    продукция.Вес = Convert.ToInt32(weidth.Text);
-                    продукция.Каталог = catalog.SelectedIndex;
-                    db.SaveChanges();
+                    продукция.Цена = Decimal.Parse(price.Text);
+                    продукция.Вес = Int32.Parse(weidth.Text);
+                    продукция.Общее_количество_склад = Int32.Parse(count.Text);
+                    продукция.Каталог = catalog.SelectedIndex + 1;
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in entityValidationErrors.ValidationErrors)
+                            {
+                                MessageBox.Show("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+                            }
+                        }
+                    }
                 }
                 ListViewLoad();
                 save.IsEnabled = false;
@@ -218,9 +257,33 @@ namespace Greenhouse_products
         {
             if (isLoggedIn)
             {
+                popup.IsOpen = false;
                 PrivateAccount privateAccount = new PrivateAccount();
                 privateAccount.Show();
                 this.Hide();
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Authorization authorization = new Authorization();
+                    authorization.Show();
+                    this.Hide();
+                }
+            }
+        }
+
+        private void basket_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isLoggedIn)
+            {
+                if (basket.IsVisible)
+                {
+                    Basket basket = new Basket();
+                    basket.Show();
+                    this.Hide();
+                }
             }
             else
             {

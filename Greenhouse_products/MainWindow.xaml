@@ -57,13 +57,13 @@
             <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="4" Text="Добавить" HorizontalAlignment="Left" x:Name="add" MouseLeftButtonDown="add_MouseLeftButtonDown"/>
-            <Image Grid.Column="5" Source="./images/basket.png" Style="{StaticResource ImageStyle}" x:Name="account_image" HorizontalAlignment="Right"/>
+            <Image Grid.Column="5" Source="./images/basket.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="basket_MouseLeftButtonDown" HorizontalAlignment="Right"/>
             <Ellipse Width="20" x:Name="basket" Height="20" Fill="LightBlue" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="5"/>
             <TextBlock x:Name="count" FontSize="15" Grid.Column="5" Foreground="Black" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="6,0"/>
             <ToggleButton x:Name="toggleButton" HorizontalAlignment="Center" VerticalAlignment="Center" ClickMode="Press" Grid.Column="6" Background="LightGoldenrodYellow">
                 <Image Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}"/>
             </ToggleButton>
-            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False">
+            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False" x:Name="popup">
                 <StackPanel>
                     <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" x:Name="out" Click="private_acc_Click"/>
                     <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>

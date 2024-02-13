@@ -30,34 +30,37 @@ namespace Greenhouse_products
         public MainWindow()
         {
             InitializeComponent();
+            popup.IsOpen = false;
+            basket.Visibility = Visibility.Collapsed;
             if (CurrentUser != 0)
             {
                 Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
-                if (заказ.Статус != 1)
+                if (заказ != null)
                 {
-                    basket.Visibility = Visibility.Collapsed;
+                    if (заказ.Статус != 1)
+                    {
+                        basket.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                        count.Text = продуция_Заказ.ToString();
+                        basket.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
-                    count.Text = продуция_Заказ.ToString();
-                    basket.Visibility = Visibility;
+                    basket.Visibility = Visibility.Collapsed;
                 }
-            }
-            else
-            {
-                basket.Visibility = Visibility.Collapsed;
             }
 
             if (isAdmin == false)
             {
                 add.Visibility = Visibility.Collapsed;
             }
-            if (account_image.Source == null)
+            else
             {
-                Uri resourceUri = new Uri("./images/user.png", UriKind.Relative);
-                ImageSource imageSource = new BitmapImage(resourceUri);
-                account_image.Source = imageSource;
+                add.Visibility = Visibility.Visible;
             }
         }
 
@@ -97,9 +100,11 @@ namespace Greenhouse_products
         {
             if (isLoggedIn)
             {
+                popup.IsOpen = false;
                 PrivateAccount privateAccount = new PrivateAccount();
                 privateAccount.Show();
                 this.Hide();
+
             }
             else
             {
@@ -115,7 +120,31 @@ namespace Greenhouse_products
 
         private void add_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            AddEditDeleteProducts addEditDeleteProducts = new AddEditDeleteProducts();
+            addEditDeleteProducts.Show();
+            this.Hide();
+        }
+        private void basket_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isLoggedIn)
+            {
+                if (basket.IsVisible)
+                {
+                    Basket basket = new Basket();
+                    basket.Show();
+                    this.Hide();
+                }
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Authorization authorization = new Authorization();
+                    authorization.Show();
+                    this.Hide();
+                }
+            }
         }
     }
 }

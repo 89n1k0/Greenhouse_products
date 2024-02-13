@@ -37,22 +37,35 @@ namespace Greenhouse_products
             {
                 using (greenhouse_productsEntities db = new greenhouse_productsEntities())
                 {
-                    Пользователь пользователь = db.Пользователь.Where(x => x.Почта == email.Text && x.Пароль == pass.Password).First();
+                    Пользователь пользователь = db.Пользователь.Where(x => x.Почта == email.Text && x.Пароль == pass.Password).FirstOrDefault();
                     if (пользователь != null)
                     {
                         MessageBox.Show("Данный пользователь уже существует");
                     }
                     else
                     {
-                        пользователь = new Пользователь();
-                        пользователь.Почта = email.Text;
-                        пользователь.Пароль = pass.Password;
-                        пользователь.Роль = 2;
-                        db.Пользователь.Add(пользователь);
-                        db.SaveChanges();
-                        Authorization authorization = new Authorization();
-                        authorization.Show();
-                        this.Hide();
+                        if (email.Text.Contains("@") && email.Text.Contains("."))
+                        {
+                            if (pass.Password.Count() > 6) {
+                                пользователь = new Пользователь();
+                                пользователь.Почта = email.Text;
+                                пользователь.Пароль = pass.Password;
+                                пользователь.Роль = 1;
+                                db.Пользователь.Add(пользователь);
+                                db.SaveChanges();
+                                Authorization authorization = new Authorization();
+                                authorization.Show();
+                                this.Hide();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Пароль должен содержать более 6 символов");
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Электронная почта не прошла проверку");
+                        }
                     }
                 }
             }

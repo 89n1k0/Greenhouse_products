@@ -8,7 +8,7 @@
         Icon="./images/icon.png"
         Title="Личный кабинет" Height="450" Width="800">
     <Window.Resources>
-        <Style TargetType="TextBlock">
+        <Style x:Key="Header" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="TextAlignment" Value="Center"/>
@@ -48,22 +48,22 @@
                 <ColumnDefinition Width="45*"/>
                 <ColumnDefinition Width="73*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock FontWeight="Bold" FontSize="20">
+            <TextBlock FontWeight="Bold" FontSize="20" Style="{StaticResource Header}">
             Садовый
             <LineBreak/> 
             край
             </TextBlock>
-            <TextBlock Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
-            <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
-            <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
-            <TextBlock Grid.Column="4" Text="Добавить" HorizontalAlignment="Left" x:Name="add" MouseLeftButtonDown="add_MouseLeftButtonDown"/>
-            <Image Grid.Column="5" Source="./images/basket.png" Style="{StaticResource ImageStyle}" x:Name="account_image" HorizontalAlignment="Right"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="4" Text="Добавить" HorizontalAlignment="Left" x:Name="add" MouseLeftButtonDown="add_MouseLeftButtonDown"/>
+            <Image Grid.Column="5" Source="./images/basket.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="basket_MouseLeftButtonDown" HorizontalAlignment="Right"/>
             <Ellipse x:Name="basket" Width="20" Height="20" Fill="LightBlue" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="5"/>
             <TextBlock x:Name="count" FontSize="15" Grid.Column="5" Foreground="Black" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="6,0"/>
             <ToggleButton x:Name="toggleButton" HorizontalAlignment="Center" VerticalAlignment="Center" ClickMode="Press" Grid.Column="6" Background="LightGoldenrodYellow">
                 <Image Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}"/>
             </ToggleButton>
-            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False">
+            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False" x:Name="popup">
                 <StackPanel>
                     <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" x:Name="out" Click="private_acc_Click"/>
                     <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>
@@ -111,7 +111,7 @@
                                 <Label Content="{Binding Номер}" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                                 <Label Content="{Binding Сумма}" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="2"/>
                                 <Label Content="{Binding Дата_создания}" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-                                <Label x:Name="status" FontSize="12" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                                <Label Content="{Binding Статус}" FontSize="12" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

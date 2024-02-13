@@ -73,6 +73,7 @@
     <Compile Include="Basket.xaml.cs">
       <DependentUpon>Basket.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BasketViewModel.cs" />
     <Compile Include="Fruits.xaml.cs">
       <DependentUpon>Fruits.xaml</DependentUpon>
     </Compile>
@@ -97,6 +98,7 @@
     <Compile Include="PrivateAccount.xaml.cs">
       <DependentUpon>PrivateAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProductViewModel.cs" />
     <Compile Include="Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
     </Compile>

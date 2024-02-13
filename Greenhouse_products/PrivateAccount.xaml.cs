@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -27,45 +28,60 @@ namespace Greenhouse_products
         public PrivateAccount()
         {
             InitializeComponent();
+            popup.IsOpen = false;
+            basket.Visibility = Visibility.Collapsed;
             if (CurrentUser != 0)
             {
                 Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
-                if (заказ.Статус != 1)
+                if (заказ != null)
                 {
-                    basket.Visibility = Visibility.Collapsed;
+                    if (заказ.Статус != 1)
+                    {
+                        basket.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                        count.Text = продуция_Заказ.ToString();
+                        basket.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    int продуция_Заказ = _context.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
-                    count.Text = продуция_Заказ.ToString();
-                    basket.Visibility = Visibility;
+                    basket.Visibility = Visibility.Collapsed;
                 }
-            }
-            else
-            {
-                basket.Visibility = Visibility.Collapsed;
             }
 
             if (isAdmin == false)
             {
                 add.Visibility = Visibility.Collapsed;
             }
+            else
+            {
+                add.Visibility = Visibility.Visible;
+            }
             ListBasket.Items.Clear();
 
-            _basket = _context.Заказ.Where(x => x.Пользователь == CurrentUser).ToList();
-            ListBasket.ItemsSource = _basket;
+            var productsWithCounts = _context.Заказ
+    .Join(
+        _context.Статус,
+        product => product.Статус,
+        order => order.Номер,
+        (product, order) => new BasketViewModel
+        {
+            Номер = product.Номер,
+            Дата_создания = product.Дата_оформления,
+            Сумма = (decimal)product.Сумма,
+            Статус = order.Наименование
+        })
+    .ToList();
+            ListBasket.ItemsSource = productsWithCounts;
             using (greenhouse_productsEntities db = new greenhouse_productsEntities())
             {
                 Пользователь пользователь = db.Пользователь.Where(x => x.Номер == CurrentUser).FirstOrDefault();
                 email.Text = пользователь.Почта;
                 pass.Text = пользователь.Пароль;
 
-            }
-            if (account_image.Source == null)
-            {
-                Uri resourceUri = new Uri("./images/user.png", UriKind.Relative);
-                ImageSource imageSource = new BitmapImage(resourceUri);
-                account_image.Source = imageSource;
             }
         }
 
@@ -103,6 +119,7 @@ namespace Greenhouse_products
         {
             if (isLoggedIn)
             {
+                popup.IsOpen = false;
                 PrivateAccount privateAccount = new PrivateAccount();
                 privateAccount.Show();
                 this.Hide();
@@ -135,7 +152,7 @@ namespace Greenhouse_products
         {
             if (sender is ListViewItem item)
             {
-                var product = item.Content as Заказ;
+                var product = item.DataContext as BasketViewModel;
                 int id = product.Номер;
                 ListProductBasket listProductBasket = new ListProductBasket(id);
                 listProductBasket.Show();
@@ -148,6 +165,28 @@ namespace Greenhouse_products
             AddEditDeleteProducts addEditDeleteProducts = new AddEditDeleteProducts();
             addEditDeleteProducts.Show();
             this.Hide();
+        }
+        private void basket_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isLoggedIn)
+            {
+                if (basket.IsVisible)
+                {
+                    Basket basket = new Basket();
+                    basket.Show();
+                    this.Hide();
+                }
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Authorization authorization = new Authorization();
+                    authorization.Show();
+                    this.Hide();
+                }
+            }
         }
     }
 }

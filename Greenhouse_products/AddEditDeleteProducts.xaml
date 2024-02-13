@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Изменение данных о продукции" Height="450" Width="900">
     <Window.Resources>
-        <Style TargetType="TextBlock">
+        <Style x:Key="Header" TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="TextAlignment" Value="Center"/>
@@ -59,22 +59,22 @@
                 <ColumnDefinition Width="45*"/>
                 <ColumnDefinition Width="73*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock FontWeight="Bold" FontSize="20">
+            <TextBlock Style="{StaticResource Header}" FontWeight="Bold" FontSize="20">
             Садовый
             <LineBreak/> 
             край
             </TextBlock>
-            <TextBlock Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
-            <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
-            <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
-            <TextBlock Grid.Column="4" Text="Добавить" HorizontalAlignment="Left" x:Name="add" MouseLeftButtonDown="add_MouseLeftButtonDown"/>
-            <Image Grid.Column="5" Source="./images/basket.png" Style="{StaticResource ImageStyle}" x:Name="account_image" HorizontalAlignment="Right"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="1" Text="Овощи" x:Name="vegetables" MouseLeftButtonDown="vegetables_MouseLeftButtonDown"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
+            <TextBlock Style="{StaticResource Header}" Grid.Column="4" Text="Добавить" HorizontalAlignment="Left" x:Name="add" MouseLeftButtonDown="add_MouseLeftButtonDown"/>
+            <Image Grid.Column="5" Source="./images/basket.png" Style="{StaticResource ImageStyle}" HorizontalAlignment="Right" MouseLeftButtonDown="basket_MouseLeftButtonDown"/>
             <Ellipse Width="20" Height="20" Fill="LightBlue" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="5" x:Name="basket"/>
             <TextBlock x:Name="counts" FontSize="15" Grid.Column="5" Foreground="Black" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="6,0"/>
             <ToggleButton x:Name="toggleButton" HorizontalAlignment="Center" VerticalAlignment="Center" ClickMode="Press" Grid.Column="6" Background="LightGoldenrodYellow">
                 <Image Source="./images/ellipses.png" Style="{StaticResource EllipsesImageStyle}"/>
             </ToggleButton>
-            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False">
+            <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False" x:Name="popup">
                 <StackPanel>
                     <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" x:Name="out" Click="private_acc_Click"/>
                     <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>
@@ -99,7 +99,7 @@
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Наименование}">Название</GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Вес}">Вес</GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Цена}">Цена</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Количество}">Количество</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Общее_количество_склад}">Количество</GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -117,8 +117,8 @@
                     <RowDefinition Height="40*"/>
                     <RowDefinition Height="129*"/>
                 </Grid.RowDefinitions>
-                <Border HorizontalAlignment="Center" Height="80" VerticalAlignment="Center" Width="80" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="Black">
-                    <Image Width="80" Height="80" x:Name="image"/>
+                <Border HorizontalAlignment="Center" Height="80" VerticalAlignment="Center" Width="80" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="Black" ToolTip="Нажмите,чтобы изменить">
+                    <Image Width="80" Height="80" x:Name="image" ToolTip="Нажмите,чтобы изменить"/>
                 </Border>
                 <Label Content="Название" Grid.Row="1"/>
                 <Label Content="Вес" Grid.Row="2"/>
@@ -135,6 +135,7 @@
             <Button Grid.Column="1" Content="Добавить" Margin="0,30,0,0" VerticalAlignment="Top" Grid.Row="1"  Click="add_Click"/>
             <Button Grid.Column="1" Content="Получить данные" Grid.Row="1" x:Name="edit"  Click="edit_Click"/>
             <Button Grid.Column="1" Content="Удалить" Margin="0,0,0,30" Grid.Row="1" VerticalAlignment="Bottom" x:Name="delete"  Click="delete_Click"/>
+            <Button Grid.Column="1" Content="Выбрать изображение" HorizontalAlignment="Center" Margin="0,6,0,0" VerticalAlignment="Top" Click="ChoosePhoto_Click"/>
         </Grid>
     </Grid>
 </Window>

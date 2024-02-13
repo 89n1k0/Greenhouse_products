@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -31,43 +34,68 @@ namespace Greenhouse_products
         public Basket()
         {
             InitializeComponent();
-            /// <summary>
-            /// Доступность корзины
-            /// </summary>
-            if (CurrentUser != 0)
+            ListViewLoad();
+            popup.IsOpen = false;
+            if (isAdmin == false)
             {
-                заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
-                if (заказ.Статус != 1)
-                {
-                    basket.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    int продуция_Заказ = db.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
-                    count.Text = продуция_Заказ.ToString();
-                    basket.Visibility = Visibility;
-                }
+                add.Visibility = Visibility.Collapsed;
             }
             else
             {
-                basket.Visibility = Visibility.Collapsed;
+                add.Visibility = Visibility.Visible;
             }
             /// <summary>
-            /// Заполнение корзины выбранными товарами
+            /// Доступность корзины
             /// </summary>
+            basket.Visibility = Visibility.Collapsed;
+            if (CurrentUser != 0)
+            {
+                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                if (заказ != null)
+                {
+                    if (заказ.Статус != 1)
+                    {
+                        basket.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        int продуция_Заказ = db.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).Count();
+                        count.Text = продуция_Заказ.ToString();
+                        basket.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    basket.Visibility = Visibility.Collapsed;
+                }
+            }
+            card.IsEnabled = false;
+        }
+        /// <summary>
+        /// Заполнение корзины выбранными товарами
+        /// </summary>
+        public void ListViewLoad()
+        {
             заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
             id = заказ.Номер;
-            ListProducts.Items.Clear();
-            _products = db.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).ToList();
-            ListProducts.ItemsSource = _products;
+            total_sum.Content = db.Заказ.Where(x => x.Номер == id).FirstOrDefault().Сумма.ToString();
 
-            /// <summary>
-            /// Указание количества того или иного продукта
-            /// </summary>
-            card.IsEnabled = false;
-            ListViewItem listViewItem = (ListViewItem)ListProducts.ItemContainerGenerator.ContainerFromIndex(107);
-            TextBox counts = (TextBox)listViewItem.FindName("counts");
-            counts.Text = all_count.ToString();
+            var productsWithCounts = db.Продукция
+    .Join(
+        db.Продуция_заказ,
+        product => product.Номер,
+        order => order.Продукция,
+        (product, order) => new ProductViewModel
+        {
+            Номер = order.Номер,
+            Наименование = product.Наименование,
+            Изображение = product.Изображение,
+            Сумма = (decimal)order.Сумма,
+            Количество = (int)order.Количество,
+            Продукция = (int)order.Продукция
+        })
+    .ToList();
+            ListProducts.ItemsSource = productsWithCounts;
         }
         /// <summary>
         /// Удаление продукта из корзины
@@ -127,13 +155,18 @@ namespace Greenhouse_products
         /// </summary>
         private void minus_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is ListViewItem item)
+            var button = sender as Button;
+            if (button != null)
             {
-                var product = item.Content as Продуция_заказ;
-                var номер_продукции = product.Продукция;
-                int количество = (int)db.Продуция_заказ.Where(x => x.Продукция == номер_продукции && x.Заказ == id).FirstOrDefault().Количество;
-                количество -= количество;
-                db.SaveChanges();
+                var product = button.DataContext as ProductViewModel;
+                if (product != null)
+                {
+                    var номер_продукции = product.Продукция;
+                    int количество = (int)db.Продуция_заказ.Where(x => x.Продукция == номер_продукции && x.Заказ == id).FirstOrDefault().Количество;
+                    количество -= количество;
+                    db.SaveChanges();
+                    ListViewLoad();
+                }
             }
         }
         /// <summary>
@@ -141,13 +174,18 @@ namespace Greenhouse_products
         /// </summary>
         private void plus_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is ListViewItem item)
+            var button = sender as Button;
+            if (button != null)
             {
-                var product = item.Content as Продуция_заказ;
-                var номер_продукции = product.Продукция;
-                int количество = (int)db.Продуция_заказ.Where(x => x.Продукция == номер_продукции && x.Заказ == id).FirstOrDefault().Количество;
-                количество += количество;
-                db.SaveChanges();
+                var product = button.DataContext as ProductViewModel;
+                if (product != null)
+                {
+                    var номер_продукции = product.Продукция;
+                    int количество = (int)db.Продуция_заказ.Where(x => x.Продукция == номер_продукции && x.Заказ == id).FirstOrDefault().Количество;
+                    количество += количество;
+                    db.SaveChanges();
+                    ListViewLoad();
+                }
             }
         }
 
@@ -185,6 +223,7 @@ namespace Greenhouse_products
         {
             if (isLoggedIn)
             {
+                popup.IsOpen = false;
                 PrivateAccount privateAccount = new PrivateAccount();
                 privateAccount.Show();
                 this.Hide();
@@ -206,6 +245,45 @@ namespace Greenhouse_products
             AddEditDeleteProducts addEditDeleteProducts = new AddEditDeleteProducts();
             addEditDeleteProducts.Show();
             this.Hide();
+        }
+        private void basket_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isLoggedIn)
+            {
+                if (basket.IsVisible)
+                {
+                    Basket basket = new Basket();
+                    basket.Show();
+                    this.Hide();
+                }
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Authorization authorization = new Authorization();
+                    authorization.Show();
+                    this.Hide();
+                }
+            }
+        }
+
+        private void toggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as ToggleButton;
+            if (button != null)
+            {
+                var product = button.DataContext as ProductViewModel;
+                if (product != null)
+                {
+                    int id = product.Номер;
+                    Продуция_заказ продуция_Заказ = db.Продуция_заказ.Where(x => x.Номер == id).FirstOrDefault();
+                    db.Продуция_заказ.Remove(продуция_Заказ);
+                    db.SaveChanges();
+                    ListViewLoad();
+                }
+            }
         }
     }
 }
