@@ -65,8 +65,8 @@
             </ToggleButton>
             <Popup PlacementTarget="{Binding ElementName=toggleButton}" IsOpen="{Binding ElementName=toggleButton, Path=IsChecked, Mode=TwoWay}" StaysOpen="False" x:Name="popup">
                 <StackPanel>
-                    <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" x:Name="out" Click="private_acc_Click"/>
-                    <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" x:Name="private_acc" Click="out_Click"/>
+                    <Button Content="Личный кабинет" Style="{StaticResource PopupButtonStyle}" Click="private_acc_Click"/>
+                    <Button Content="Выйти" Style="{StaticResource PopupButtonStyle}" Click="out_Click"/>
                 </StackPanel>
             </Popup>
         </Grid>

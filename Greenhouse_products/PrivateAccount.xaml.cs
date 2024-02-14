@@ -77,8 +77,9 @@ namespace Greenhouse_products
             Номер = product.Номер,
             Дата_создания = product.Дата_оформления,
             Сумма = (decimal)product.Сумма,
-            Статус = order.Наименование
-        })
+            Статус = order.Наименование,
+            Пользователь = (int)product.Пользователь
+        }).Where(x => x.Пользователь ==CurrentUser)
     .ToList();
             ListBasket.ItemsSource = productsWithCounts;
             using (greenhouse_productsEntities db = new greenhouse_productsEntities())

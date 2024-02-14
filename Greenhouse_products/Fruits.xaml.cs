@@ -108,6 +108,7 @@ namespace Greenhouse_products
         {
             isLoggedIn = false;
             CurrentUser = 0;
+            popup.IsOpen = false;
             Authorization authorization = new Authorization();
             authorization.Show();
             this.Hide();

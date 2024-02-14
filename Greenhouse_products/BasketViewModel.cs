@@ -12,5 +12,6 @@ namespace Greenhouse_products
         public Nullable<System.DateTime> Дата_создания { get; set; }
         public decimal Сумма { get; set; }
         public string Статус { get; set; }
+        public int Пользователь { get; set; }
     }
 }

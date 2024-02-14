@@ -170,6 +170,7 @@ namespace Greenhouse_products
         {
             isLoggedIn = false;
             CurrentUser = 0;
+            popup.IsOpen = false;
             Authorization authorization = new Authorization();
             authorization.Show();
             this.Hide();
@@ -237,6 +238,7 @@ namespace Greenhouse_products
                     Продуция_заказ продуция_Заказ = db.Продуция_заказ.Where(x => x.Номер == id).FirstOrDefault();
                     Заказ заказ =db.Заказ.Where(x => x.Номер == id).FirstOrDefault();
                     заказ.Сумма -= db.Продукция.Where(x => x.Номер == продуция_Заказ.Продукция).FirstOrDefault().Цена;
+                    total_sum.Content = заказ.Сумма.ToString();
                     db.Продуция_заказ.Remove(продуция_Заказ);
                     db.SaveChanges();
                     ListViewLoad();
