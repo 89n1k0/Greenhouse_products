@@ -1,24 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Application;
 
 namespace Greenhouse_products
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Главное окно
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -56,10 +44,12 @@ namespace Greenhouse_products
 
             if (isAdmin == false)
             {
+                order.Visibility = Visibility.Collapsed;
                 add.Visibility = Visibility.Collapsed;
             }
             else
             {
+                order.Visibility = Visibility.Visible;
                 add.Visibility = Visibility.Visible;
             }
         }
@@ -89,8 +79,9 @@ namespace Greenhouse_products
 
         private void out_Click(object sender, RoutedEventArgs e)
         {
-            isLoggedIn = false;
-            CurrentUser = 0;
+            ((App)Application.Current).IsLoggedIn = false;
+            ((App)Application.Current).isAdmin = false;
+            ((App)Application.Current).CurrentUser = 0;
             popup.IsOpen = false;
             Authorization authorization = new Authorization();
             authorization.Show();
@@ -146,6 +137,13 @@ namespace Greenhouse_products
                     this.Hide();
                 }
             }
+        }
+
+        private void order_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Change_order_status status = new Change_order_status();
+            status.Show();
+            this.Hide();
         }
     }
 }

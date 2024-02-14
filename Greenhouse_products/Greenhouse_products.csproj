@@ -74,6 +74,9 @@
       <DependentUpon>Basket.xaml</DependentUpon>
     </Compile>
     <Compile Include="BasketViewModel.cs" />
+    <Compile Include="Change_order_status.xaml.cs">
+      <DependentUpon>Change_order_status.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Fruits.xaml.cs">
       <DependentUpon>Fruits.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="OrderViewModel.cs" />
     <Compile Include="PrivateAccount.xaml.cs">
       <DependentUpon>PrivateAccount.xaml</DependentUpon>
     </Compile>
@@ -138,6 +142,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Basket.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Change_order_status.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

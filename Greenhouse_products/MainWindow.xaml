@@ -57,6 +57,7 @@
             <TextBlock Grid.Column="2" Text="Фрукты" x:Name="fruits" MouseLeftButtonDown="fruits_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="3" Text="О нас" x:Name="about" MouseLeftButtonDown="about_MouseLeftButtonDown"/>
             <TextBlock Grid.Column="4" Text="Добавить" HorizontalAlignment="Left" x:Name="add" MouseLeftButtonDown="add_MouseLeftButtonDown"/>
+            <TextBlock Grid.Column="4" Text="Заказы" HorizontalAlignment="Center" x:Name="order" MouseLeftButtonDown="order_MouseLeftButtonDown"/>
             <Image Grid.Column="5" Source="./images/basket.png" Style="{StaticResource ImageStyle}" MouseLeftButtonDown="basket_MouseLeftButtonDown" HorizontalAlignment="Right"/>
             <Ellipse Width="20" x:Name="basket" Height="20" Fill="LightBlue" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="5"/>
             <TextBlock x:Name="count" FontSize="15" Grid.Column="5" Foreground="Black" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="6,0"/>

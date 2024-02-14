@@ -1,21 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Greenhouse_products
 {
@@ -31,6 +19,7 @@ namespace Greenhouse_products
         public int id;
         private List<Продуция_заказ> _products = new List<Продуция_заказ>();
         public greenhouse_productsEntities db = new greenhouse_productsEntities();
+        public List<ProductViewModel> productsWithCounts = new List<ProductViewModel>();
         public Basket()
         {
             InitializeComponent();
@@ -39,10 +28,12 @@ namespace Greenhouse_products
             popup.IsOpen = false;
             if (isAdmin == false)
             {
+                order.Visibility = Visibility.Collapsed;
                 add.Visibility = Visibility.Collapsed;
             }
             else
             {
+                order.Visibility= Visibility.Visible;
                 add.Visibility = Visibility.Visible;
             }
 
@@ -83,9 +74,8 @@ namespace Greenhouse_products
         {
             заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
             id = заказ.Номер;
-            total_sum.Content = db.Заказ.Where(x => x.Номер == id).FirstOrDefault().Сумма.ToString();
 
-            var productsWithCounts = db.Продукция
+            productsWithCounts = db.Продукция
     .Join(
         db.Продуция_заказ,
         product => product.Номер,
@@ -102,6 +92,8 @@ namespace Greenhouse_products
         }).Where(x => x.Заказ == id)
     .ToList();
             ListProducts.ItemsSource = productsWithCounts;
+            total_sum.Content = productsWithCounts.Sum(x => x.Сумма).ToString();
+
         }
         /// <summary>
         /// Оформление заказа
@@ -120,6 +112,7 @@ namespace Greenhouse_products
                             заказ.Статус = 2;
                             заказ.Адрес = adress.Text;
                             заказ.Дата_оформления = DateTime.Now;
+                            заказ.Сумма = productsWithCounts.Sum(x => x.Сумма);
                             db.SaveChanges();
                             MessageBox.Show("Заказ оформлен");
                             PrivateAccount privateAccount = new PrivateAccount();
@@ -168,8 +161,9 @@ namespace Greenhouse_products
 
         private void out_Click(object sender, RoutedEventArgs e)
         {
-            isLoggedIn = false;
-            CurrentUser = 0;
+            ((App)Application.Current).IsLoggedIn = false;
+            ((App)Application.Current).isAdmin = false;
+            ((App)Application.Current).CurrentUser = 0;
             popup.IsOpen = false;
             Authorization authorization = new Authorization();
             authorization.Show();
@@ -236,14 +230,22 @@ namespace Greenhouse_products
                 {
                     int id = product.Номер;
                     Продуция_заказ продуция_Заказ = db.Продуция_заказ.Where(x => x.Номер == id).FirstOrDefault();
-                    Заказ заказ =db.Заказ.Where(x => x.Номер == id).FirstOrDefault();
+                    Заказ заказ =db.Заказ.Where(x => x.Номер == продуция_Заказ.Заказ).FirstOrDefault();
                     заказ.Сумма -= db.Продукция.Where(x => x.Номер == продуция_Заказ.Продукция).FirstOrDefault().Цена;
                     total_sum.Content = заказ.Сумма.ToString();
                     db.Продуция_заказ.Remove(продуция_Заказ);
                     db.SaveChanges();
                     ListViewLoad();
+                    EllipseBasketCount();
                 }
             }
+        }
+
+        private void order_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Change_order_status change_Order_Status = new Change_order_status();
+            change_Order_Status.Show();
+            this.Hide();
         }
     }
 }

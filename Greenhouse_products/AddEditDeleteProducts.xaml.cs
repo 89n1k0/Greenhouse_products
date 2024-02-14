@@ -36,10 +36,12 @@ namespace Greenhouse_products
             popup.IsOpen = false;
             if (isAdmin == false)
             {
+                order.Visibility = Visibility.Collapsed;
                 add.Visibility = Visibility.Collapsed;
             }
             else
             {
+                order.Visibility= Visibility.Visible;
                 add.Visibility = Visibility.Visible;
             }
             basket.Visibility = Visibility.Collapsed;
@@ -246,8 +248,9 @@ namespace Greenhouse_products
 
         private void out_Click(object sender, RoutedEventArgs e)
         {
-            isLoggedIn = false;
-            CurrentUser = 0;
+            ((App)Application.Current).IsLoggedIn = false;
+            ((App)Application.Current).isAdmin = false;
+            ((App)Application.Current).CurrentUser = 0;
             Authorization authorization = new Authorization();
             authorization.Show();
             this.Hide();
@@ -267,6 +270,7 @@ namespace Greenhouse_products
                 MessageBoxResult result = MessageBox.Show("Вы не авторизованы", "Авторизоваться", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
+                    popup.IsOpen = false;
                     Authorization authorization = new Authorization();
                     authorization.Show();
                     this.Hide();
@@ -295,6 +299,13 @@ namespace Greenhouse_products
                     this.Hide();
                 }
             }
+        }
+
+        private void order_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Change_order_status change_Order_Status = new Change_order_status();
+            change_Order_Status.Show();
+            this.Hide();
         }
     }
 }

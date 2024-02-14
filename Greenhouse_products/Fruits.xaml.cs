@@ -1,24 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.ComponentModel;
-using System.Windows.Shapes;
-using System.Collections.ObjectModel;
-using System.Windows.Controls.Primitives;
 
 namespace Greenhouse_products
 {
     /// <summary>
-    /// Логика взаимодействия для Fruits.xaml
+    /// Фрукты
     /// </summary>
     public partial class Fruits : Window
     {
@@ -41,10 +30,12 @@ namespace Greenhouse_products
 
             if (isAdmin == false)
             {
+                order.Visibility = Visibility.Collapsed;
                 add.Visibility = Visibility.Collapsed;
             }
             else
             {
+                order.Visibility = Visibility.Visible;
                 add.Visibility = Visibility.Visible;
             }
             ListProducts.Items.Clear();
@@ -106,8 +97,9 @@ namespace Greenhouse_products
 
         private void out_Click(object sender, RoutedEventArgs e)
         {
-            isLoggedIn = false;
-            CurrentUser = 0;
+            ((App)Application.Current).IsLoggedIn = false;
+            ((App)Application.Current).isAdmin = false;
+            ((App)Application.Current).CurrentUser = 0;
             popup.IsOpen = false;
             Authorization authorization = new Authorization();
             authorization.Show();
@@ -180,6 +172,7 @@ namespace Greenhouse_products
                                     заказ = new Заказ();
                                     заказ.Пользователь = CurrentUser;
                                     заказ.Статус = 1;
+                                    заказ.Сумма = 0;
                                     db.Заказ.Add(заказ);
                                     db.SaveChanges();
 
@@ -197,12 +190,15 @@ namespace Greenhouse_products
                                 заказ = new Заказ();
                                 заказ.Пользователь = CurrentUser;
                                 заказ.Статус = 1;
+                                заказ.Сумма = 0;
                                 db.Заказ.Add(заказ);
                                 db.SaveChanges();
 
                                 Продуция_заказ продуция_Заказ = new Продуция_заказ();
                                 продуция_Заказ.Заказ = заказ.Номер;
                                 продуция_Заказ.Продукция = id;
+                                продуция_Заказ.Количество = 1;
+                                продуция_Заказ.Сумма = db.Продукция.Where(x => x.Номер == id).FirstOrDefault().Цена;
                                 db.Продуция_заказ.Add(продуция_Заказ);
                                 db.SaveChanges();
                             }
@@ -290,6 +286,13 @@ namespace Greenhouse_products
                     this.Hide();
                 }
             }
+        }
+
+        private void order_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Change_order_status status = new Change_order_status();
+            status.Show();
+            this.Hide();
         }
     }
 }
