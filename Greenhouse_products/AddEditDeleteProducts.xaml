@@ -126,8 +126,8 @@
                 <Label Content="Количество" Grid.Row="4"/>
                 <Label Content="Каталог" Grid.Row="5"/>
                 <TextBox Grid.Column="1" Grid.Row="1" x:Name="name"/>
-                <TextBox Grid.Column="1" Grid.Row="2" x:Name="price"/>
-                <TextBox Grid.Column="1" Grid.Row="3" x:Name="weidth"/>
+                <TextBox Grid.Column="1" Grid.Row="2" x:Name="weidth"/>
+                <TextBox Grid.Column="1" Grid.Row="3" x:Name="price"/>
                 <TextBox Grid.Column="1" Grid.Row="4" x:Name="count"/>
                 <ComboBox Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" x:Name="catalog"/>
                 <Button Grid.Column="0" Width="170" Height="30" FontSize="16" Content="Сохранить" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="Center" Grid.ColumnSpan="2" x:Name="save" Click="save_Click"/>

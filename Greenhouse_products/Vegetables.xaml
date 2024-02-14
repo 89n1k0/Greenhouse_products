@@ -135,7 +135,7 @@
                                 <TextBlock Grid.Row="1" Text="{Binding Наименование}" FontSize="15" TextWrapping="Wrap" TextAlignment="Center" x:Name="Name_product" Height="26" Width="132" Grid.ColumnSpan="2"/>
                                 <TextBlock Grid.Row="2" Text="{Binding Вес}" FontSize="13" TextAlignment="Center" Grid.Column="0"/>
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Цена}" FontSize="15" TextAlignment="Center" FontWeight="Bold"/>
-                                <Button Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="120" Height="25" Content="Добавить в корзину" x:Name="Basket" Click="Basket_Click"/>
+                                <Button Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Width="120" Height="25" Content="В корзину" FontSize="16" x:Name="Basket" Click="Basket_Click"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

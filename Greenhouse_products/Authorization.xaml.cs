@@ -37,7 +37,7 @@ namespace Greenhouse_products
             {
                 using (greenhouse_productsEntities db = new greenhouse_productsEntities())
                 {
-                    Пользователь пользователь = db.Пользователь.Where(x => x.Почта == email.Text && x.Пароль == pass.Password).First();
+                    Пользователь пользователь = db.Пользователь.Where(x => x.Почта == email.Text && x.Пароль == pass.Password).FirstOrDefault();
                     if (пользователь != null)
                     {
                         ((App)Application.Current).CurrentUser = пользователь.Номер;

@@ -36,8 +36,8 @@ namespace Greenhouse_products
         public Fruits()
         {
             InitializeComponent();
+            EllipseBasketCount();
             popup.IsOpen = false;
-            basket.Visibility = Visibility.Collapsed;
 
             if (isAdmin == false)
             {
@@ -63,7 +63,7 @@ namespace Greenhouse_products
             basket.Visibility = Visibility.Collapsed;
             if (CurrentUser != 0)
             {
-                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
                 if (заказ != null)
                 {
                     if (заказ.Статус != 1)
@@ -161,7 +161,7 @@ namespace Greenhouse_products
                         using (greenhouse_productsEntities db = new greenhouse_productsEntities())
                         {
 
-                            Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).FirstOrDefault();
+                            Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
                             if (заказ != null)
                             {
                                 if (заказ.Статус == 1)
@@ -232,7 +232,7 @@ namespace Greenhouse_products
                     var query = from data in db.Продукция
                                 where data.Наименование.Contains(searchText) && data.Каталог > 13
                                 select data;
-                    ListProduct.ItemsSource = query.ToList();
+                    ListProducts.ItemsSource = query.ToList();
                 }
             }
             else
@@ -242,7 +242,7 @@ namespace Greenhouse_products
                     var query = from data in db.Продукция
                                 where data.Каталог > 13
                                 select data;
-                    ListProduct.ItemsSource = query.ToList();
+                    ListProducts.ItemsSource = query.ToList();
                 }
             }
         }

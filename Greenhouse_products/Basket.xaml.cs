@@ -34,6 +34,7 @@ namespace Greenhouse_products
         public Basket()
         {
             InitializeComponent();
+            EllipseBasketCount();
             ListViewLoad();
             popup.IsOpen = false;
             if (isAdmin == false)
@@ -44,13 +45,17 @@ namespace Greenhouse_products
             {
                 add.Visibility = Visibility.Visible;
             }
-            /// <summary>
-            /// Доступность корзины
-            /// </summary>
+
+            card.IsEnabled = false;
+        }
+
+
+        public void EllipseBasketCount()
+        {
             basket.Visibility = Visibility.Collapsed;
             if (CurrentUser != 0)
             {
-                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
                 if (заказ != null)
                 {
                     if (заказ.Статус != 1)
@@ -69,14 +74,14 @@ namespace Greenhouse_products
                     basket.Visibility = Visibility.Collapsed;
                 }
             }
-            card.IsEnabled = false;
         }
+
         /// <summary>
         /// Заполнение корзины выбранными товарами
         /// </summary>
         public void ListViewLoad()
         {
-            заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+            заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
             id = заказ.Номер;
             total_sum.Content = db.Заказ.Where(x => x.Номер == id).FirstOrDefault().Сумма.ToString();
 
@@ -92,27 +97,11 @@ namespace Greenhouse_products
             Изображение = product.Изображение,
             Сумма = (decimal)order.Сумма,
             Количество = (int)order.Количество,
-            Продукция = (int)order.Продукция
-        })
+            Продукция = (int)order.Продукция,
+            Заказ = (int)order.Заказ
+        }).Where(x => x.Заказ == id)
     .ToList();
             ListProducts.ItemsSource = productsWithCounts;
-        }
-        /// <summary>
-        /// Удаление продукта из корзины
-        /// </summary>
-        private void drop_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is ListViewItem item)
-            {
-                var product = item.Content as Продуция_заказ;
-                int id = product.Номер;
-                Продуция_заказ продуция_Заказ = db.Продуция_заказ.Where(x => x.Номер == id).FirstOrDefault();
-                db.Продуция_заказ.Remove(продуция_Заказ);
-                ListProducts.Items.Clear();
-                _products = db.Продуция_заказ.Where(x => x.Заказ == заказ.Номер).ToList();
-                ListProducts.ItemsSource = _products;
-
-            }
         }
         /// <summary>
         /// Оформление заказа
@@ -121,7 +110,7 @@ namespace Greenhouse_products
         {
             using (greenhouse_productsEntities db = new greenhouse_productsEntities())
             {
-                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser).FirstOrDefault();
+                Заказ заказ = db.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
                 if (заказ.Статус == 1)
                 {
                     if (adress.Text != "")
@@ -130,8 +119,13 @@ namespace Greenhouse_products
                         {
                             заказ.Статус = 2;
                             заказ.Адрес = adress.Text;
-                            заказ.Дата_создания = DateTime.Now;
+                            заказ.Дата_оформления = DateTime.Now;
                             db.SaveChanges();
+                            MessageBox.Show("Заказ оформлен");
+                            PrivateAccount privateAccount = new PrivateAccount();
+                            privateAccount.Show();
+                            this.Hide();
+                            EllipseBasketCount();
                         }
                         else
                         {
@@ -147,44 +141,6 @@ namespace Greenhouse_products
                 else
                 {
                     MessageBox.Show("Корзина пуста");
-                }
-            }
-        }
-        /// <summary>
-        /// Уменьшение количества продукта
-        /// </summary>
-        private void minus_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            if (button != null)
-            {
-                var product = button.DataContext as ProductViewModel;
-                if (product != null)
-                {
-                    var номер_продукции = product.Продукция;
-                    int количество = (int)db.Продуция_заказ.Where(x => x.Продукция == номер_продукции && x.Заказ == id).FirstOrDefault().Количество;
-                    количество -= количество;
-                    db.SaveChanges();
-                    ListViewLoad();
-                }
-            }
-        }
-        /// <summary>
-        /// Увеличение количества продукта
-        /// </summary>
-        private void plus_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            if (button != null)
-            {
-                var product = button.DataContext as ProductViewModel;
-                if (product != null)
-                {
-                    var номер_продукции = product.Продукция;
-                    int количество = (int)db.Продуция_заказ.Where(x => x.Продукция == номер_продукции && x.Заказ == id).FirstOrDefault().Количество;
-                    количество += количество;
-                    db.SaveChanges();
-                    ListViewLoad();
                 }
             }
         }
@@ -279,6 +235,8 @@ namespace Greenhouse_products
                 {
                     int id = product.Номер;
                     Продуция_заказ продуция_Заказ = db.Продуция_заказ.Where(x => x.Номер == id).FirstOrDefault();
+                    Заказ заказ =db.Заказ.Where(x => x.Номер == id).FirstOrDefault();
+                    заказ.Сумма -= db.Продукция.Where(x => x.Номер == продуция_Заказ.Продукция).FirstOrDefault().Цена;
                     db.Продуция_заказ.Remove(продуция_Заказ);
                     db.SaveChanges();
                     ListViewLoad();

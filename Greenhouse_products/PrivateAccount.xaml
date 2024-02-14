@@ -72,26 +72,24 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="102*"/>
-                <RowDefinition Height="55*"/>
-                <RowDefinition Height="55*"/>
-                <RowDefinition Height="109*"/>
+                <RowDefinition Height="100*"/>
+                <RowDefinition Height="60*"/>
+                <RowDefinition Height="60*"/>
+                <RowDefinition Height="132*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="99*"/>
                 <ColumnDefinition Width="158*"/>
                 <ColumnDefinition Width="543*"/>
             </Grid.ColumnDefinitions>
-            <Border HorizontalAlignment="Center" Height="80" VerticalAlignment="Center" Width="80" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="Black">
-                <Image Width="80" Height="80"/>
-            </Border>
-            <Label Content="Почта" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center"/>
-            <Label Content="Пароль" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="email"/>
-            <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="pass"/>
-            <Button Grid.Column="0" Width="100" Height="30" FontSize="16" Content="Сохранить" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Grid.ColumnSpan="2" x:Name="save" Click="save_Click"/>
-            <Label Grid.Column="2" Content="Заказы:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20"/>
-            <ListView x:Name="ListBasket" d:ItemsSource="{d:SampleData ItemCount=5}" Width="500" Height="300" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" VerticalAlignment="Center" Margin="21,61,22,23">
+            <Label Content="Личный кабинет" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.ColumnSpan="2" FontSize="20"/>
+            <Label Content="Почта" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Height="25" Width="43"/>
+            <Label Content="Пароль" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="26" Width="51"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="email" Height="17"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="120" x:Name="pass" Height="18"/>
+            <Button Grid.Column="0" Width="100" Height="30" FontSize="16" Content="Сохранить" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Grid.ColumnSpan="2" x:Name="save" Click="save_Click"/>
+            <Label Grid.Column="2" Content="Заказы:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Height="37" Width="79"/>
+            <ListView x:Name="ListBasket" d:ItemsSource="{d:SampleData ItemCount=5}" Height="300" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" VerticalAlignment="Top" Margin="21,61,22,0">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel>

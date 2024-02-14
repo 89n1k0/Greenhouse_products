@@ -14,5 +14,6 @@ namespace Greenhouse_products
         public decimal Сумма { get; set; }
         public int Количество { get; set; }
         public int Продукция { get; set; }
+        public int Заказ { get; set; }
     }
 }

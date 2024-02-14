@@ -34,7 +34,7 @@ namespace Greenhouse_products
             basket.Visibility = Visibility.Collapsed;
             if (CurrentUser != 0)
             {
-                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
                 if (заказ != null)
                 {
                     if (заказ.Статус != 1)

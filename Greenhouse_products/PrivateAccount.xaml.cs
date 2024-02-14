@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
+using Application = System.Windows.Application;
 
 namespace Greenhouse_products
 {
@@ -25,6 +29,7 @@ namespace Greenhouse_products
         public bool isAdmin = ((App)Application.Current).isAdmin;
         private greenhouse_productsEntities _context = new greenhouse_productsEntities();
         private List<Заказ> _basket = new List<Заказ>();
+        public byte[] _image = null;
         public PrivateAccount()
         {
             InitializeComponent();
@@ -32,7 +37,7 @@ namespace Greenhouse_products
             basket.Visibility = Visibility.Collapsed;
             if (CurrentUser != 0)
             {
-                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser).OrderByDescending(x => x.Дата_создания).FirstOrDefault();
+                Заказ заказ = _context.Заказ.Where(x => x.Пользователь == CurrentUser && x.Дата_оформления == null).FirstOrDefault();
                 if (заказ != null)
                 {
                     if (заказ.Статус != 1)
@@ -140,10 +145,18 @@ namespace Greenhouse_products
         {
             using (greenhouse_productsEntities db = new greenhouse_productsEntities())
             {
-                Пользователь пользователь = db.Пользователь.Where(x => x.Номер == CurrentUser).FirstOrDefault();
-                пользователь.Почта = email.Text;
-                пользователь.Пароль = pass.Text;
-                db.SaveChanges();
+                if (email.Text != "" && pass.Text != "")
+                {
+                    Пользователь пользователь = db.Пользователь.Where(x => x.Номер == CurrentUser).FirstOrDefault();
+                    пользователь.Почта = email.Text;
+                    пользователь.Пароль = pass.Text;
+                    db.SaveChanges();
+                    MessageBox.Show("данные изменены");
+                }
+                else
+                {
+                    MessageBox.Show("Заполните все поля");
+                }
 
             }
         }
