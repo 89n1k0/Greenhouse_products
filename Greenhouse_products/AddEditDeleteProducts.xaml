@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Greenhouse_products"
         mc:Ignorable="d"
+        Icon="./images/icon.png"
         Title="Изменение данных о продукции" Height="450" Width="900">
     <Window.Resources>
         <Style x:Key="Header" TargetType="TextBlock">
